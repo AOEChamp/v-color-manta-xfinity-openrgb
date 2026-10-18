@@ -19,4 +19,4 @@ python -m pip install -r firmware/requirements-dev.txt
 
 Shared implementation and offline test modules live in `_internal/`. They are imported by the supported commands and are not standalone user tools. They retain strict original-image guards, selected-address routing, bounded page writes, staged-payload/readback checks, and incomplete-update guards. `transport.py` loads the user's installed PawnIO runtime without dynamically rewriting source.
 
-Firmware/reference files live in `../images/`; runtime flash reports live in `../reports/`. Keep reports when investigating a failure. No command automatically flashes every detected module, changes DDR SPD, or performs a full-image recovery.
+Firmware/reference files live in `../images/`; generated flash/test reports live in `../reports/`. The captured settings block used only by offline tests lives in `../tests/fixtures/`. Keep reports when investigating a failure. No command automatically flashes every detected module, changes DDR SPD, or performs a full-image recovery.

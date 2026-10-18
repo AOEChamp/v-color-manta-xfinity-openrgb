@@ -130,5 +130,7 @@ def run():
                           'corrupt settings rejection', '02 and 55 erase paths',
                           'bad firmware and header rejection', 'wrong input refusal'],
                   limitation='Flash effects and CPU-visible mapping are simulated. Hardware protection, timing, interrupts, power loss and live persistence remain unverified.')
-    (ROOT / 'e000-candidate-tests.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+    reports = ROOT.parent / 'reports'
+    reports.mkdir(exist_ok=True)
+    (reports / 'e000-candidate-tests.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
     print(json.dumps(report, indent=2))

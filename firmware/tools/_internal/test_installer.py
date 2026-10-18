@@ -86,5 +86,7 @@ def run():
         cases.append(dict(fault=fault, passed=True, writes=[hex(a) for a in bus.programmed],
                           application_resumed=report.get('application_resumed', False)))
     result = dict(hardware_access=False, cases=cases)
-    (installer.ROOT / 'e000-installer-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+    reports = installer.ROOT.parent / 'reports'
+    reports.mkdir(exist_ok=True)
+    (reports / 'e000-installer-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))

@@ -31,7 +31,7 @@ From this firmware directory, using Python 3.12 (the development version):
 ```powershell
 python -m pip install -r requirements-dev.txt
 python tools/build_firmware.py
-python tools/analyze_firmware.py images/vcolor-7730-0x71-20261017T135335444329Z-pass1.bin
+python tools/analyze_firmware.py images/vcolor-7730-stock.bin
 python tools/validate_final.py
 ```
 

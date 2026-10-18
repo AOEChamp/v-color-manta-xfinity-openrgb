@@ -22,8 +22,7 @@ def run():
     candidate, manifest = build(original)
     assert OUTPUT.read_bytes() == candidate
     parent, _ = build_v1(original)
-    report = json.loads((ROOT / 'e000-runtime-save-20261018T064216372384Z.json').read_text())
-    captured = bytes.fromhex(report['saved_block_read']['regions'][0]['data'])
+    captured = (ROOT.parent / 'tests/fixtures/saved-static-red.bin').read_bytes()
     assert len(captured) == 384 and captured[382] == 0x5A
     assert captured[383] == sum(captured[:383]) & 255
     old = cold_start(parent, captured)
@@ -85,5 +84,7 @@ def run():
                 'actual ARM firmware/header checksum validators and corruption rejection',
                 'wrong build input rejected'],
         limitation='CPU and flash effects simulated; visible output and power-loss behavior untested')
-    (ROOT / 'e000-v2-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+    reports = ROOT.parent / 'reports'
+    reports.mkdir(exist_ok=True)
+    (reports / 'e000-v2-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))

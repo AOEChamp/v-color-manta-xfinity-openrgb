@@ -5,7 +5,7 @@ from pathlib import Path
 import struct
 
 ROOT = Path(__file__).resolve().parents[2] / 'images'
-SOURCE = ROOT / 'vcolor-7730-0x71-20261017T135335444329Z-pass1.bin'
+SOURCE = ROOT / 'vcolor-7730-stock.bin'
 SHA256 = 'beaa0db9a2cee7c0ad0af668fd3860b3a1b4d327f7150941d39d0f3db40c278a'
 OUTPUT = ROOT / 'vcolor-7730-e000-candidate.bin'
 
