@@ -22,6 +22,6 @@ python src/bridge/openrgb_bridge.py --print-config
 
 These commands do not access RAM. Running the server or `--list` requires administrator access and a supported OpenRGB/PawnIO installation. Source runs can select a configuration with `--config`; compiled runs read `bridge-config.json` beside the executable.
 
-The installed application lives in `%LOCALAPPDATA%\Programs\VColorOpenRGBBridge`. Rebuilding `bin` does not update that installation: close OpenRGB and run `bin/Install.cmd` to upgrade it. Setup retains installed configuration and replaces the startup task's location, then checks the listening process before claiming success.
+The installed application lives in `%LOCALAPPDATA%\Programs\VColorOpenRGBBridge`. Rebuilding `bin` does not update that installation. To reinstall, close OpenRGB, run the installed `Uninstall.cmd`, then run `bin/Install.cmd`. Setup supports a fresh installation and rejects an existing installation or startup task; it does not migrate development versions. It saves the resolved absolute OpenRGB path before copying the bridge and checks the listening process before claiming success. Uninstall uses the saved SDK port and settings path without requiring OpenRGB discovery.
 
 Firmware build and validation instructions are in [../firmware/DEVELOPMENT.md](../firmware/DEVELOPMENT.md). The [protocol reference](docs/PROTOCOL.md) describes the runtime register sequence.

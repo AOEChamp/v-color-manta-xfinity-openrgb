@@ -8,13 +8,13 @@ A Windows bridge that adds compatible V-Color Manta XFinity DDR5 lighting to Ope
 2. Download or clone this repository. Keep the complete `bin` folder together and run **[bin/Install.cmd](bin/Install.cmd)**. Accept elevation using the same Windows account you use for OpenRGB.
 3. Wait for **Installed and running**, then open OpenRGB normally and accept its administrator prompt. The RAM devices connect automatically; no SDK or firmware configuration is required.
 
-The installer copies the application to **`%LOCALAPPDATA%\Programs\VColorOpenRGBBridge`**. It replaces an older bridge startup task, saves OpenRGB's localhost SDK connection with a settings backup, and verifies the new bridge is listening before reporting success. It also configures OpenRGB to request administrator rights for native hardware detection. The bridge starts silently at sign-in; OpenRGB keeps its normal hardware detection.
+The installer copies the application to **`%LOCALAPPDATA%\Programs\VColorOpenRGBBridge`**. It saves OpenRGB's localhost SDK connection with a settings backup, and verifies the new bridge is listening before reporting success. It also configures OpenRGB to request administrator rights for native hardware detection. The bridge starts silently at sign-in; OpenRGB keeps its normal hardware detection.
 
-After successful installation, you can move or remove the downloaded repository. The installed application does not depend on that folder. No Python installation is needed. The bridge does not stop, pause or restart other RGB applications or services.
+After successful installation, you can move or remove the downloaded bridge files. Keep OpenRGB itself at the location recorded during installation, including when using a portable copy. No Python installation is needed. The bridge does not stop, pause or restart other RGB applications or services.
 
 ## Configuration and troubleshooting
 
-OpenRGB's folder must contain `OpenRGB.exe`, `PawnIOLib.dll` and `SmbusPIIX4.bin`. The bridge discovers portable installations beside itself, standard Program Files installations and OpenRGB on PATH. If discovery fails, copy `bin/bridge-config.example.json` to `bin/bridge-config.json`, set `openrgb_dir`, and rerun Install. Existing installed configuration is preserved during upgrades; edit it in the installed application folder when updating settings.
+OpenRGB's folder must contain `OpenRGB.exe`, `PawnIOLib.dll` and `SmbusPIIX4.bin`. The bridge discovers portable installations beside itself, standard Program Files installations and OpenRGB on PATH. If discovery fails, copy `bin/bridge-config.example.json` to `bin/bridge-config.json`, set `openrgb_dir`, and rerun Install. The resolved absolute OpenRGB folder and selected ports are saved in the installed configuration. Edit that file if OpenRGB moves. To reinstall, run Uninstall.cmd first; this first public release does not migrate earlier development installations.
 
 The optional settings are `openrgb_dir` (null for discovery), `port` (default 6743) and `smbus_port` (default 0). If another SDK server uses 6743, select a free port before installation. For OpenRGB launched with a custom configuration directory, use:
 

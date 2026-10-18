@@ -1,11 +1,14 @@
 import json
+import io
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'bridge'))
 from client_settings import configure_client
+import openrgb_bridge
 
 
 class ClientSettingsTests(unittest.TestCase):
@@ -43,6 +46,14 @@ class ClientSettingsTests(unittest.TestCase):
         self.assertFalse(configure_client(self.path,6743,True)['changed'])
         configure_client(self.path,6743)
         self.assertEqual(json.loads(self.path.read_text()),{'Client':{'clients':[{'ip':'127.0.0.1','port':6743}]}})
+
+    def test_remove_uses_saved_port_without_loading_runtime_config(self):
+        configure_client(self.path, 6744)
+        configure_client(self.path, 6743)
+        argv = ['bridge', '--configure-client', 'remove', '--settings-file', str(self.path), '--port', '6744']
+        with patch.object(sys, 'argv', argv), patch.object(openrgb_bridge, 'load_config', side_effect=AssertionError('Runtime config must not be needed')), patch('sys.stdout', new_callable=io.StringIO):
+            openrgb_bridge.main()
+        self.assertEqual(json.loads(self.path.read_text())['Client']['clients'], [{'ip':'127.0.0.1','port':6743}])
 
 
 if __name__ == '__main__': unittest.main()

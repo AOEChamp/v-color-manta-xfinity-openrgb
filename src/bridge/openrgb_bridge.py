@@ -144,13 +144,15 @@ def main():
     parser.add_argument('--color', help='Set all DIMMs to RRGGBB and exit')
     parser.add_argument('--list', action='store_true', help='Identify DIMMs without changing colors')
     args = parser.parse_args()
-    settings = load_config(args.config)
     if args.port is not None:
         if not 1024 <= args.port <= 65535: parser.error('--port must be from 1024 to 65535')
-        settings['port'] = args.port
     if args.configure_client:
-        print(json.dumps(configure_client(settings_path(args.settings_file), settings['port'], args.configure_client == 'remove')))
+        port = args.port if args.port is not None else load_config(args.config)['port']
+        print(json.dumps(configure_client(settings_path(args.settings_file), port, args.configure_client == 'remove')))
         return
+    settings = load_config(args.config)
+    if args.port is not None:
+        settings['port'] = args.port
     settings['openrgb_dir'] = find_openrgb(args.openrgb_dir or settings['openrgb_dir'])
     if args.print_config:
         print(json.dumps(settings))
