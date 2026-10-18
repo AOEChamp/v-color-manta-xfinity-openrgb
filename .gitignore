@@ -7,7 +7,7 @@ __pycache__/
 **/logs/
 **/bridge-config.json
 **/install-state.json
-src/firmware/images/*install-*.json
-src/firmware/images/config-*.bin
-src/firmware/images/acquisition-*.json
-src/firmware/reports/
+firmware/images/*install-*.json
+firmware/images/config-*.bin
+firmware/images/acquisition-*.json
+firmware/reports/

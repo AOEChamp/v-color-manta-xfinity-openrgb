@@ -12,21 +12,21 @@ Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the bridge, and othe
 ## 1. Run the flashing script
 
 ```powershell
-.\src\firmware\Flash-V2.ps1
+.\firmware\Flash-V2.ps1
 ```
 
 For a portable or custom OpenRGB installation:
 
 ```powershell
-.\src\firmware\Flash-V2.ps1 -OpenRGBDir '<OpenRGB directory>'
+.\firmware\Flash-V2.ps1 -OpenRGBDir '<OpenRGB directory>'
 ```
 
-The direct Python equivalent is `python src/firmware/tools/flash_v2.py --execute --openrgb-dir '<OpenRGB directory>'`. Relative installation paths are resolved from the directory where you launch the command, including when using the PowerShell launcher.
+The direct Python equivalent is `python firmware/tools/flash_v2.py --execute --openrgb-dir '<OpenRGB directory>'`. Relative installation paths are resolved from the directory where you launch the command, including when using the PowerShell launcher.
 
 If Python is not on PATH:
 
 ```powershell
-.\src\firmware\Flash-V2.ps1 -Python '<path to python.exe>'
+.\firmware\Flash-V2.ps1 -Python '<path to python.exe>'
 ```
 
 The script lists responding RGB controllers with hardware identity, SMBus address, chip ID, signature, and support status. It also lists Windows DIMM slot/manufacturer/part names. Enter the **number of the controller you want to flash**, or press Enter to cancel. Only one controller is flashed per run. No address argument is required. It rechecks discovery after your selection, then performs the stock-image preflight before programming. Already-patched firmware fails stock preflight; this tool is not a reinstall or rollback utility.
@@ -43,7 +43,7 @@ A successful run prints:
 Firmware installed and verified. Application resumed; saved settings preserved.
 ```
 
-The full JSON report is saved to `src/firmware/reports/v2-install-<UTC timestamp>.json`; the tool prints its exact path. Generated reports are ignored by Git.
+The full JSON report is saved to `firmware/reports/v2-install-<UTC timestamp>.json`; the tool prints its exact path. Generated reports are ignored by Git.
 
 Check that the process exited successfully, the report has no `error`, and these fields are true:
 

@@ -1,6 +1,6 @@
 # Development
 
-The runtime implementation is in `bridge`, Windows setup in `windows`, and offline tests in `tests`. `firmware` contains separate firmware research and tools; bridge setup never invokes them.
+The runtime implementation is in `bridge`, Windows setup in `windows`, and offline tests in `tests`. The top-level `../firmware` directory contains separate firmware research and tools; bridge setup never invokes them.
 
 From the repository root, using Python 3.12 x64 on Windows:
 
@@ -24,4 +24,4 @@ These commands do not access RAM. Running the server or `--list` requires admini
 
 The installed application lives in `%LOCALAPPDATA%\Programs\VColorOpenRGBBridge`. Rebuilding `bin` does not update that installation: close OpenRGB and run `bin/Install.cmd` to upgrade it. Setup retains installed configuration and replaces the startup task's location, then checks the listening process before claiming success.
 
-Firmware build and validation instructions are in [firmware/DEVELOPMENT.md](firmware/DEVELOPMENT.md). The [protocol reference](docs/PROTOCOL.md) describes the runtime register sequence.
+Firmware build and validation instructions are in [../firmware/DEVELOPMENT.md](../firmware/DEVELOPMENT.md). The [protocol reference](docs/PROTOCOL.md) describes the runtime register sequence.

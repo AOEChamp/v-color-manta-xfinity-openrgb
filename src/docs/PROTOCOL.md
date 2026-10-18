@@ -21,4 +21,4 @@ The server listens only on IPv4 loopback and implements OpenRGB SDK protocol 3. 
 
 Device locks serialize SDK updates. A process lock and OpenRGB's named `Global\Access_SMBUS.HTP.Method` mutex cover each complete hardware transaction. The PIIX4 port is reselected under that mutex before every transaction because other OpenRGB detectors can change it. Software color state is committed after successful hardware operations.
 
-The bridge does not install drivers, use vendor RGB DLLs, remap DIMMs, write DDR SPD or enter the bootloader. Separate firmware tools under `src/firmware` implement the explicitly selected firmware workflow.
+The bridge does not install drivers, use vendor RGB DLLs, remap DIMMs, write DDR SPD or enter the bootloader. Separate firmware tools under `firmware` implement the explicitly selected firmware workflow.

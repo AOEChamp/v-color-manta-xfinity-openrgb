@@ -2,7 +2,7 @@
 
 The bridge source is supplied under GPL-2.0-or-later (see LICENSE).
 
-The source repository also contains separate firmware research under src/firmware. Its firmware binaries contain original ENE/V-COLOR program code plus interoperability patches. The project source license does not grant rights to that third-party firmware; no vendor redistribution license has been established here. Firmware is not included in bin.
+The source repository also contains separate firmware research under firmware. Its firmware binaries contain original ENE/V-COLOR program code plus interoperability patches. The project source license does not grant rights to that third-party firmware; no vendor redistribution license has been established here. Firmware is not included in bin.
 
 The standalone Windows package embeds Python 3.12.14, distributed under the Python Software Foundation license and associated notices; see PYTHON-LICENSE.txt. PyInstaller 6.22.3 produces the executable. Its bootloader is GPL-2.0-or-later with the PyInstaller bootloader exception; see PYINSTALLER-COPYING.txt.
 

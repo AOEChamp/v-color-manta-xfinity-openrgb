@@ -32,7 +32,7 @@ Requires **Windows x64 and AMD PIIX4 SMBus**. The supported RAM is **TMXFL166083
 
 **Save to Device assumes patched E000 v2 firmware on every matched DIMM.** Apply your lighting, then save each desired DIMM. Ordinary Apply does not persist lighting. Direct saves a snapshot; Off saves black. The bridge does not verify or flash firmware, and the original firmware does not provide the repaired persistence behavior.
 
-The [firmware documentation](src/firmware/DEVELOPMENT.md) and [flashing instructions](src/firmware/FLASHING.md) are under `src`. Firmware tools are separate from the bridge installer.
+The [firmware documentation](firmware/DEVELOPMENT.md) and [flashing instructions](firmware/FLASHING.md) are in the separate top-level `firmware` directory. Firmware tools are separate from the bridge installer.
 
 ## Repository layout
 
@@ -43,7 +43,7 @@ The [firmware documentation](src/firmware/DEVELOPMENT.md) and [flashing instruct
 | `src/windows/` | Installer and launcher source |
 | `src/tests/` | Offline bridge, settings, packaging and installer tests |
 | `src/tools/` | Build and folder preparation scripts |
-| `src/firmware/` | Firmware source tools, required reference images, tests and research |
+| `firmware/` | Firmware source tools, required reference images, tests and research |
 | `src/docs/` | Register and SDK protocol documentation |
 
 To build, install Python 3.12 x64 and run:
