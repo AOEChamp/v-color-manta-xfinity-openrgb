@@ -1,8 +1,4 @@
-"""List RGB controllers in the validated 70..73 address range without applying lighting."""
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).resolve().parent / '_internal'))
-import argparse
+"""Discovery and interactive selection shared by the flashing command."""
 import json
 import subprocess
 import transport as module
@@ -63,23 +59,3 @@ def choose(rows, input_fn=input):
     if not row['compatible_identity']:
         raise ValueError('Selected controller is not supported')
     return row['address']
-
-
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.parse_args()
-    bus = module.PawnBus()
-    try:
-        with bus.transaction():
-            rows = discover(bus)
-        display(rows)
-    finally:
-        bus.close()
-
-
-if __name__ == '__main__':
-    try:
-        main()
-    except (OSError, RuntimeError, ValueError, KeyboardInterrupt) as exc:
-        print(f'Discovery stopped: {exc}', file=sys.stderr)
-        raise SystemExit(1)

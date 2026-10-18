@@ -14,10 +14,7 @@ Embedded firmware name strings:
 Install Python 3.12 and OpenRGB with its PawnIO driver at `C:\Program Files\OpenRGB`. Close all RGB/SMBus applications, open **PowerShell as Administrator**, and change to this repository's directory.
 
 ```powershell
-# List RGB controllers and Windows DIMM hardware names first:
-python firmware/tools/list_dimms.py
-
-# List controllers again and choose the one to flash by number:
+# List DIMMs, select a controller, and flash it:
 .\firmware\Flash-V2.ps1
 ```
 

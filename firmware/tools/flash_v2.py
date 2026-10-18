@@ -9,7 +9,7 @@ import final_installer as stock
 import bootloader as boot
 from firmware_image import ROOT
 import transport as module
-from list_dimms import discover, choose, ADDRESSES
+from discovery import discover, choose, ADDRESSES
 from identity import snapshot
 
 

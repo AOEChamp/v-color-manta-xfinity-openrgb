@@ -9,31 +9,7 @@
 
 Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the bridge, and other RGB/SMBus software. Keep power stable. Flashing changes the RGB controller's program flash and can leave lighting unusable if interrupted. These tools do not write DDR SPD.
 
-## 1. Inspect the available controllers
-
-Open **PowerShell as Administrator** and change to the repository root:
-
-```powershell
-python firmware/tools/list_dimms.py
-```
-
-The listing shows each responding RGB controller's hardware identity, SMBus address, chip ID, signature, and whether its identity is supported. It also lists the DIMM slot, manufacturer, and part number reported by Windows.
-
-Windows does not reliably map its DIMM slot/part names to RGB controller addresses. The tool therefore shows those inventories separately. Select by the discovered controller entry; do not infer a slot-to-address mapping. Unsupported entries cannot be selected for flashing. Discovery performs register reads and register-pointer selection; it does not apply lighting, save settings, reset the controller, or program flash.
-
-## 2. Verify the firmware file
-
-```powershell
-Get-FileHash firmware/images/vcolor-7730-e000-v2.bin -Algorithm SHA256
-```
-
-Expected SHA-256:
-
-```text
-0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3
-```
-
-## 3. Select and flash one controller
+## 1. Run the flashing script
 
 ```powershell
 .\firmware\Flash-V2.ps1
@@ -45,11 +21,13 @@ If Python is not on PATH:
 .\firmware\Flash-V2.ps1 -Python 'C:\Path\To\python.exe'
 ```
 
-The script lists the controllers again. Enter the **number of the controller you want to flash**, or press Enter to cancel. Only one controller is flashed per run. No address argument is required. It rechecks discovery after your selection, then performs the stock-image preflight before programming. Already-patched firmware fails stock preflight; this tool is not a reinstall or rollback utility.
+The script lists responding RGB controllers with hardware identity, SMBus address, chip ID, signature, and support status. It also lists Windows DIMM slot/manufacturer/part names. Enter the **number of the controller you want to flash**, or press Enter to cancel. Only one controller is flashed per run. No address argument is required. It rechecks discovery after your selection, then performs the stock-image preflight before programming. Already-patched firmware fails stock preflight; this tool is not a reinstall or rollback utility.
 
-The launcher checks administrator access and common competing RGB processes. It does not automatically close applications. The Python tool uses a shared SMBus mutex and permits programming only on your selected controller.
+Windows does not reliably map its DIMM slots to RGB controller addresses, so the script shows the inventories separately and does not guess that mapping. Unsupported entries cannot be selected. Discovery does not apply lighting, save settings, reset controllers, or program flash. The list is displayed once; the identity check after selection runs silently.
 
-## 4. Check the result
+The launcher checks administrator access and common competing RGB processes. The installer checks the packaged firmware against its reproducible build before programming. It does not automatically close applications. The Python tool uses a shared SMBus mutex and permits programming only on your selected controller.
+
+## 2. Check the result
 
 A successful run prints:
 

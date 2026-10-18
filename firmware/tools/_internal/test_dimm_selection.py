@@ -1,6 +1,6 @@
 """Offline discovery/selection and selected-address flashing regression tests."""
 from unittest.mock import patch
-import list_dimms as discovery
+import discovery
 import flash_v2 as flash
 import test_installer as fixtures
 import final_installer as stock
