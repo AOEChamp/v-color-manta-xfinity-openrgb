@@ -40,6 +40,8 @@ See [bridge setup, configuration and removal](bin/README.txt) for portable OpenR
 
 ## Quick flashing
 
+Download the [flash ZIP](https://github.com/AOEChamp/v-color-manta-xfinity-openrgb/releases/latest/download/VColor-E000-v2-Flasher-Windows-x64.zip), extract it, and follow these instructions from the extracted folder. It contains only the flashing files and instructions; Python and OpenRGB are installed separately.
+
 Install Python 3.12 and OpenRGB with its PawnIO driver. The default OpenRGB folder is `C:\Program Files\OpenRGB`; pass `-OpenRGBDir` to the launcher for another location. Close all RGB/SMBus applications, open **PowerShell as Administrator**, and change to this repository's directory.
 
 ```powershell
