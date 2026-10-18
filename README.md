@@ -31,7 +31,7 @@ Embedded firmware name strings:
 The bridge supports Windows x64, AMD PIIX4 SMBus, and eight LEDs per DIMM; port 0 is the hardware-tested configuration. Intel SMBus and Linux are not implemented.
 
 1. Install OpenRGB with its PawnIO driver. Run OpenRGB once, then close it completely, including its tray icon. Close other RAM lighting applications.
-2. Keep the complete `bin` folder together and run **[bin/Install.cmd](bin/Install.cmd)**. Accept elevation using the same Windows account you use for OpenRGB.
+2. Download the [Windows x64 ZIP](https://github.com/AOEChamp/v-color-manta-xfinity-openrgb/releases/latest/download/VColor-OpenRGB-Bridge-Windows-x64.zip), extract it, and run **Install.cmd** from the extracted folder. Keep all extracted files together. Accept elevation using the same Windows account you use for OpenRGB. The repository's [bin folder](bin/) contains the same files.
 3. Wait for **Installed and running**, then open OpenRGB normally and accept its administrator prompt. The bridge devices connect through the saved SDK connection.
 
 The installer copies the bridge to `%LOCALAPPDATA%\Programs\VColorOpenRGBBridge` and starts it silently at sign-in. No separate Python installation is needed for the bridge. Apply your lighting and use **Save to Device** on each DIMM to persist it with E000 v2 firmware; ordinary Apply does not save.
