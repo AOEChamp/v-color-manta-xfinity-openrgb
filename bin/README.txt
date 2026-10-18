@@ -23,7 +23,8 @@ Chase Fade, Chase Fade Rainbow, Chase, Chase Rainbow, Random Flicker, Stack,
 Pong or Fill Up in the RAM device's mode list. Hardware effects have a speed
 slider. Fixed-color effects also expose per-LED colors. Save to Device stores
 the effect and speed on patched E000 firmware.
-Static and Rainbow have been visually tested on this RAM; the other effects
+Random Flicker exposes per-LED colors for the supplied final firmware.
+Static, Rainbow and fixed-color Chase have been visually tested; other effects
 are firmware-confirmed but still need visual confirmation.
 
 CUSTOM OPENRGB INSTALLATION

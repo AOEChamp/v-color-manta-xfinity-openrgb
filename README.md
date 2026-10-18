@@ -46,7 +46,7 @@ Effect IDs are confirmed from the firmware dispatcher. Static, Rainbow and fixed
 
 ## Quick flashing
 
-Use the [firmware folder](firmware/) in this repository for the final firmware and flashing tool.
+Download the [final firmware flasher](https://github.com/AOEChamp/v-color-manta-xfinity-openrgb/releases/latest/download/VColor-E000-Flasher-Windows-x64.zip) and extract it, or use the [firmware folder](firmware/) in this repository.
 Install Python 3.12 and OpenRGB with its PawnIO driver. The default OpenRGB folder is `C:\Program Files\OpenRGB`; pass `-OpenRGBDir` to the launcher for another location. Close all RGB/SMBus applications, open **PowerShell as Administrator**, and change to this repository's directory.
 
 ```powershell
