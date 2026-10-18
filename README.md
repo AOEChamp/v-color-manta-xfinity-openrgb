@@ -11,9 +11,9 @@ This repository currently includes the **E000 v2 firmware patch**, reproducible 
 
 ## What the firmware fixes
 
-In the supported stock firmware, the save routine and startup restore routine use different storage locations, and saved LED counts are restored with the wrong byte layout. As a result, saving a color does not reliably restore the intended lighting at startup.
+The supported stock firmware writes saved lighting settings to nonexistent addresses. Nothing is stored, so saved colors do not persist across shutdowns and restarts at all. The startup restore routine also uses the wrong byte layout for saved LED counts.
 
-E000 v2 makes saving and restoring use the same settings block and fixes restoration of the channel and LED counts. It preserves the existing settings format and color arrays. After compatible software explicitly saves your lighting, the controller can restore it at startup. Ordinary Apply only changes the current lighting; it does not save it to flash. See the [flashing and persistence guide](firmware/FLASHING.md) for installation and verification.
+E000 v2 redirects saving and restoring to the same writable settings block and fixes restoration of the channel and LED counts. It preserves the existing settings format and color arrays. After compatible software explicitly saves your lighting, the controller can restore it at startup. Ordinary Apply only changes the current lighting; it does not save it to flash. See the [flashing and persistence guide](firmware/FLASHING.md) for installation and verification.
 
 ## Supported hardware
 
