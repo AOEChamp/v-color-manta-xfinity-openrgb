@@ -1,5 +1,4 @@
 param(
-    [Parameter(Mandatory=$true)][ValidateSet('0x71','0x73')][string]$Target,
     [string]$Python = 'python'
 )
 $ErrorActionPreference = 'Stop'
@@ -10,6 +9,6 @@ $competing = @(Get-Process | Where-Object { $_.ProcessName -match '^(GCC|OpenRGB
 if ($competing.Count) { throw 'Close competing RGB applications before flashing.' }
 Push-Location $PSScriptRoot
 try {
-    & $Python tools/flash_v2.py --target $Target --execute
+    & $Python tools/flash_v2.py --execute
     if ($LASTEXITCODE -ne 0) { throw 'Flash failed. Preserve the report and follow FLASHING.md failure guidance.' }
 } finally { Pop-Location }

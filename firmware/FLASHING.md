@@ -2,7 +2,7 @@
 
 ## Supported setup
 
-This package supports only the exact stock image for V-COLOR TMXFL1660830WWK described in [DEVELOPMENT.md](DEVELOPMENT.md). It assumes two matching RGB controllers at SMBus addresses `0x71` and `0x73`, with a PIIX4 controller on port 0. It is not a generic DIMM updater. Already-patched firmware will fail stock preflight; do not bypass that check.
+This package supports only the exact stock image for V-COLOR TMXFL1660830WWK described in [DEVELOPMENT.md](DEVELOPMENT.md). It discovers responding RGB controllers in the validated `0x70..0x73` range on PIIX4 port 0 and lets you select one. It is not a generic DIMM updater. Already-patched firmware will fail stock preflight; do not bypass that check.
 
 Flashing changes the DIMM's RGB-controller program flash and can leave lighting unusable if interrupted. The supplied stock program dump is a reference backup, not a verified full-chip recovery image. Never write this image to DDR SPD.
 
@@ -29,22 +29,22 @@ Expected: `0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3`.
 Open PowerShell as Administrator, change to the repository root, then run:
 
 ```powershell
-.\firmware\Flash-V2.ps1 -Target 0x71
+.\firmware\Flash-V2.ps1
 ```
 
 If Python is not on PATH:
 
 ```powershell
-.\firmware\Flash-V2.ps1 -Target 0x71 -Python 'C:\Path\To\python.exe'
+.\firmware\Flash-V2.ps1 -Python 'C:\Path\To\python.exe'
 ```
 
-Inspect the generated `firmware/images/v2-install-*.json`. Success requires `all_bounded_readbacks_match_candidate`, `protection_restored`, `application_resumed`, and `control_unchanged` to be true, with no error. The process must exit successfully. After checking the first target, flash the other supported stock module separately:
+Inspect the generated `firmware/images/v2-install-*.json`. Success requires `all_bounded_readbacks_match_candidate`, `protection_restored`, `application_resumed`, and `control_unchanged` to be true, with no error. The process must exit successfully. After checking the first target, rerun the selector to flash another supported stock module:
 
 ```powershell
-.\firmware\Flash-V2.ps1 -Target 0x73
+.\firmware\Flash-V2.ps1
 ```
 
-The explicit address adapter makes the other module read-only for the update. Stock preflight compares bounded firmware pages with the reference; it is not a full live-image hash. Both identities and the known boot vector are also checked. Reproducible local image construction is checked before programming.
+Before flashing, the script lists RGB controller identities and Windows DIMM slot/manufacturer/part names, then asks for a controller number. Windows slots are not assumed to map to RGB addresses. An address adapter permits mutations only to the selected controller. Other compatible controllers are checked for unchanged state. A single compatible controller can also be selected; its report records that no control module was present. Stock preflight compares bounded firmware pages with the reference; it is not a full live-image hash. The selected identity and known boot vector are also checked, with identity revalidation after selection. Reproducible local image construction is checked before programming.
 
 The installer enters the CPU bootloader using stop/run register `0202` and flags `0606`. It stages and verifies each complete 128-byte payload twice, writes pages `4180`, `4200`, `6B00`, `6E00`, `6E80`, then `2000`, and reads each back immediately. A second bounded verification covers changed pages, neighbors, vector and all 384 saved-settings bytes (2,304 bytes per pass). Protections are restored before application exit. It does not overwrite E000 settings or automatically apply/save lighting.
 

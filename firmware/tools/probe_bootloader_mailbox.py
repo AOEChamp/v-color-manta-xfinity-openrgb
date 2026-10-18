@@ -19,8 +19,9 @@ REQUEST = bytes((0, 0, 0, 0, 0, 0, 16, 0x30, 0))
 EXPECTED = bytes.fromhex('001a0020d5000000dd000000df000000')
 
 
-def run(bus, report, save, cpu_only=False, verified_action=None):
-    report['before'] = [snapshot(bus, a) for a in (0x71, 0x73)]
+def run(bus, report, save, cpu_only=False, verified_action=None, control=True):
+    addresses = (0x71, 0x73) if control else (0x71,)
+    report['before'] = [snapshot(bus, a) for a in addresses]
     report['before_watchdog'] = bus.read(0x71, 0x600, 7).hex()
     if bus.read(0x71, 0x606, 1) != b'\x00' or bus.read(0x71, 0x202, 1)[0] & 1:
         raise RuntimeError('Expected application mode and running controller; no writes sent')
@@ -127,10 +128,11 @@ def run(bus, report, save, cpu_only=False, verified_action=None):
         if report['exit_0606'] != '00':
             raise RuntimeError('Vendor exit did not restore application flags; inspect report')
         report['after_exit_before_red'] = snapshot(bus, 0x71)
-        report['after'] = [snapshot(bus, a) for a in (0x71, 0x73)]
+        report['after'] = [snapshot(bus, a) for a in addresses]
         report['lighting_unchanged'] = report['before'] == report['after']
         report['lighting_reapplication_disabled_by_user'] = True
-        report['control_unchanged'] = report['before'][1] == report['after'][1]
+        report['control_unchanged'] = report['before'][1:] == report['after'][1:]
+        report['control_present'] = control
         report['application_resumed'] = True
         save()
         if not report['control_unchanged']:
