@@ -88,5 +88,3 @@ def run():
     result = dict(hardware_access=False, cases=cases)
     (installer.ROOT / 'e000-installer-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))
-
-

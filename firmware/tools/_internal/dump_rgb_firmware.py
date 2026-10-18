@@ -105,5 +105,3 @@ def acquire(bus, report, save, folder, stamp):
         save()
         if report['restore_errors'] or not report['registers_restored']:
             raise RuntimeError('Register restoration check failed; inspect acquisition log')
-
-

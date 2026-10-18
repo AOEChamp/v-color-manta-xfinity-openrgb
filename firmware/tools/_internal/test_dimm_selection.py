@@ -72,5 +72,3 @@ def run():
     assert [r['address'] for r in rows] == [0x71, 0x72, 0x73]
     assert [r['address'] for r in rows if r['compatible_identity']] == [0x72]
     print('Discovery/selection and 40 target/control/fault cases passed; no hardware access.')
-
-

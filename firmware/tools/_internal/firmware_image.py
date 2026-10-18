@@ -39,5 +39,3 @@ def build(original):
         settings_format_unchanged=True, existing_v1_saved_block_compatible=True,
         status='Offline build; not installed or hardware validated')
     return bytes(image), manifest
-
-

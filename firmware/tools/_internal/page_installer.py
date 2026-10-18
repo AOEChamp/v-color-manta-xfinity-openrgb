@@ -126,5 +126,3 @@ def install(bus, report, save):
     if report.get('all_bounded_readbacks_match_candidate') and report.get('protection_restored'):
         report['firmware_update_incomplete'] = False
         save()
-
-

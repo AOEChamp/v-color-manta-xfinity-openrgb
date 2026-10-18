@@ -58,5 +58,3 @@ def build(original):
                   unchanged_metadata_literals=['0x43AC', '0x43B0', '0x44B8', '0x44BC'],
                   status='Offline candidate; not installed or hardware validated')
     return bytes(image), report
-
-

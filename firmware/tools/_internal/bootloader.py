@@ -126,5 +126,3 @@ def run(bus, report, save, cpu_only=True, verified_action=None, control=True):
         save()
         if not report['control_unchanged']:
             raise RuntimeError('Control module changed after exit')
-
-

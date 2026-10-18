@@ -87,5 +87,3 @@ def run():
         limitation='CPU and flash effects simulated; visible output and power-loss behavior untested')
     (ROOT / 'e000-v2-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))
-
-

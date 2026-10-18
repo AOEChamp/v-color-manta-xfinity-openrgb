@@ -12,4 +12,3 @@ def snapshot(bus, address):
     return dict(address=hex(address), signature=signature.hex(), chip=chip.hex(),
                 mode=bus.read(address, 0xE020, 4).hex(),
                 colors=bus.read(address, 0xE300, 24).hex())
-
