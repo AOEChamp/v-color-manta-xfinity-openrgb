@@ -1,0 +1,31 @@
+{
+  "version": "E000 v2",
+  "hardware_access": false,
+  "source_sha256": "beaa0db9a2cee7c0ad0af668fd3860b3a1b4d327f7150941d39d0f3db40c278a",
+  "parent_sha256": "50116e9c076621576f47e5489032f381b420562e836f2d2ad69c1cff8ebcefa4",
+  "candidate_sha256": "0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3",
+  "application_checksum": "0xffc455b9",
+  "header_checksum": "0x502",
+  "application_checksum_end": "0xb747",
+  "settings_range": "0xE000..0xE17F",
+  "changed_pages_from_v1": [
+    "0x2000",
+    "0x6e00"
+  ],
+  "changed_pages_from_original": [
+    "0x2000",
+    "0x4180",
+    "0x4200",
+    "0x6b00",
+    "0x6e00",
+    "0x6e80"
+  ],
+  "restore_patch": {
+    "address": "0x6e4e",
+    "before": "002007e007490a5c0146a131044b5a54411c88b20228f5db7047",
+    "after": "0849064ba03308785870002098704878d870704700bf00bf00bf"
+  },
+  "settings_format_unchanged": true,
+  "existing_v1_saved_block_compatible": true,
+  "status": "Offline build; not installed or hardware validated"
+}

@@ -1,0 +1,16 @@
+{
+  "hardware_access": false,
+  "candidate_sha256": "0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3",
+  "passed": [
+    "v1 count-layout bug reproduced with captured hardware save",
+    "v2 restores actual saved red and count 0008",
+    "engine channel count 1 and LED count 8",
+    "AA save and fresh startup roundtrip",
+    "counts 1,8,16",
+    "02/55 erase paths",
+    "invalid settings fallback",
+    "actual ARM firmware/header checksum validators and corruption rejection",
+    "wrong build input rejected"
+  ],
+  "limitation": "CPU and flash effects simulated; visible output and power-loss behavior untested"
+}

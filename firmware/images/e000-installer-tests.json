@@ -1,0 +1,51 @@
+{
+  "hardware_access": false,
+  "cases": [
+    {
+      "fault": null,
+      "passed": true,
+      "writes": [
+        "0x4180",
+        "0x4200",
+        "0x6b00",
+        "0x6e00",
+        "0x6e80",
+        "0x2000"
+      ],
+      "application_resumed": true
+    },
+    {
+      "fault": "preflight",
+      "passed": true,
+      "writes": [],
+      "application_resumed": true
+    },
+    {
+      "fault": "readback",
+      "passed": true,
+      "writes": [
+        "0x4180",
+        "0x4200"
+      ],
+      "application_resumed": false
+    },
+    {
+      "fault": "error",
+      "passed": true,
+      "writes": [
+        "0x4180",
+        "0x4200"
+      ],
+      "application_resumed": false
+    },
+    {
+      "fault": "uncertain",
+      "passed": true,
+      "writes": [
+        "0x4180",
+        "0x4200"
+      ],
+      "application_resumed": false
+    }
+  ]
+}

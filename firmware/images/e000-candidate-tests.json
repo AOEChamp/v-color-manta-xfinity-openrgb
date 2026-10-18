@@ -1,0 +1,17 @@
+{
+  "hardware_access": false,
+  "candidate_sha256": "50116e9c076621576f47e5489032f381b420562e836f2d2ad69c1cff8ebcefa4",
+  "passed": [
+    "original and candidate boot checks",
+    "AA dispatcher and actual app writer",
+    "three relocated pages only",
+    "settings marker/checksum",
+    "firmware checksum after save",
+    "fresh SRAM startup restore",
+    "corrupt settings rejection",
+    "02 and 55 erase paths",
+    "bad firmware and header rejection",
+    "wrong input refusal"
+  ],
+  "limitation": "Flash effects and CPU-visible mapping are simulated. Hardware protection, timing, interrupts, power loss and live persistence remain unverified."
+}

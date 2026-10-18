@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+firmware/images/*install-*.json
+firmware/images/*runtime-save-*.json
+!firmware/images/e000-runtime-save-20261018T064216372384Z.json
+firmware/images/config-*.bin
+firmware/images/acquisition-*.json
