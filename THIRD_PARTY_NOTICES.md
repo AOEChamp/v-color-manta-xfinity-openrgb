@@ -1,11 +1,7 @@
-# Third-party components
+# Third-party notices
 
-The bridge source is supplied under GPL-2.0-or-later (see LICENSE).
+Project bridge transport source is GPL-2.0-or-later; see LICENSE. Firmware binaries contain original ENE/V-COLOR program code plus local interoperability patches. The project source license does not grant rights to third-party firmware; no vendor redistribution license has been established here.
 
-The source repository also contains separate firmware research under firmware. Its firmware binaries contain original ENE/V-COLOR program code plus interoperability patches. The project source license does not grant rights to that third-party firmware; no vendor redistribution license has been established here. Firmware is not included in bin.
+PawnIOLib.dll, the signed SmbusPIIX4.bin module and the PawnIO driver are loaded from the user's OpenRGB installation and are not redistributed. Python is required separately for the firmware tools and source builds; the standalone bridge bundles its runtime. Capstone and Unicorn are optional development dependencies installed under their own licenses. Proprietary vendor DLLs, decompilation products and vendor installers are not included.
 
-The standalone Windows package embeds Python 3.12.14, distributed under the Python Software Foundation license and associated notices; see PYTHON-LICENSE.txt. PyInstaller 6.22.3 produces the executable. Its bootloader is GPL-2.0-or-later with the PyInstaller bootloader exception; see PYINSTALLER-COPYING.txt.
-
-The bridge loads the user's existing OpenRGB PawnIOLib.dll and signed SmbusPIIX4.bin from the OpenRGB installation. Neither file is redistributed here. PawnIOLib's source identifies its license as LGPL-2.1-or-later.
-
-Gigabyte, ENE and other vendor libraries were used only for local interoperability research and are not bundled. The portable compiler, tracing/decompilation tools and test-client package used during development are also excluded from this release.
+The standalone Windows bridge embeds Python 3.12.14; see PYTHON-LICENSE.txt in its package (src/licenses/PYTHON-LICENSE.txt in the source tree). PyInstaller 6.22.3 builds the executable; its bootloader license and exception are in PYINSTALLER-COPYING.txt (also under src/licenses).

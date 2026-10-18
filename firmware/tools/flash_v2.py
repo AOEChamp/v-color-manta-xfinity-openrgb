@@ -5,7 +5,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / '_internal'))
 import argparse
 import datetime
 import json
-import os
 import final_installer as stock
 import bootloader as boot
 from firmware_image import ROOT
@@ -53,11 +52,9 @@ class TargetBus:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true', required=True)
-    parser.add_argument('--openrgb-dir', type=Path, default=(Path(os.environ['ProgramFiles']) / 'OpenRGB') if os.environ.get('ProgramFiles') else None,
+    parser.add_argument('--openrgb-dir', type=Path, default=Path(r'C:\Program Files\OpenRGB'),
                         help='OpenRGB directory containing PawnIOLib.dll and SmbusPIIX4.bin')
     args = parser.parse_args()
-    if args.openrgb_dir is None:
-        parser.error('Specify --openrgb-dir on this system')
     report = {}
     reports = ROOT.parent / 'reports'
     reports.mkdir(exist_ok=True)

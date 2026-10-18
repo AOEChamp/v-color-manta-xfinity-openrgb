@@ -4,7 +4,7 @@
 
 - Supported stock firmware for V-COLOR Manta XFinity **TMXFL1660830WWK**, ENE **6K7732** RGB controller (chip-ID bytes `77 30`, signature `A8 32 16 E8 8C`). A matching identity alone does not establish firmware compatibility; the installer also checks stock firmware pages.
 - Windows x64, Python 3.12, and administrator PowerShell.
-- OpenRGB with the installed PawnIO driver, `PawnIOLib.dll`, and signed `SmbusPIIX4.bin` module. The default folder is the OpenRGB folder under Program Files; use `-OpenRGBDir` for another installation folder. Python flashing tools require no pip packages.
+- OpenRGB with the installed PawnIO driver, `PawnIOLib.dll`, and signed `SmbusPIIX4.bin` module. The default folder is `C:\Program Files\OpenRGB`; use `-OpenRGBDir` for another installation folder. Python flashing tools require no pip packages.
 - AMD PIIX4 SMBus port 0. Discovery is limited to RGB controller addresses `0x70..0x73`. Intel transport and other bus configurations are not supported by these tools.
 
 Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the bridge, and other RGB/SMBus software. Keep power stable. Flashing changes the RGB controller's program flash and can leave lighting unusable if interrupted. These tools do not write DDR SPD.
@@ -18,15 +18,15 @@ Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the bridge, and othe
 For a portable or custom OpenRGB installation:
 
 ```powershell
-.\firmware\Flash-V2.ps1 -OpenRGBDir '<OpenRGB directory>'
+.\firmware\Flash-V2.ps1 -OpenRGBDir 'D:\Apps\OpenRGB'
 ```
 
-The direct Python equivalent is `python firmware/tools/flash_v2.py --execute --openrgb-dir '<OpenRGB directory>'`. Relative installation paths are resolved from the directory where you launch the command, including when using the PowerShell launcher.
+The direct Python equivalent is `python firmware/tools/flash_v2.py --execute --openrgb-dir 'D:\Apps\OpenRGB'`. Relative installation paths are resolved from the directory where you launch the command, including when using the PowerShell launcher.
 
 If Python is not on PATH:
 
 ```powershell
-.\firmware\Flash-V2.ps1 -Python '<path to python.exe>'
+.\firmware\Flash-V2.ps1 -Python 'C:\Path\To\python.exe'
 ```
 
 The script lists responding RGB controllers with hardware identity, SMBus address, chip ID, signature, and support status. It also lists Windows DIMM slot/manufacturer/part names. Enter the **number of the controller you want to flash**, or press Enter to cancel. Only one controller is flashed per run. No address argument is required. It rechecks discovery after your selection, then performs the stock-image preflight before programming. Already-patched firmware fails stock preflight; this tool is not a reinstall or rollback utility.
@@ -58,7 +58,7 @@ After verifying the result, rerun the launcher and select a different supported 
 
 ## Save lighting and check persistence
 
-Flashing preserves the existing saved-settings block and does not apply or save a new color. Apply your desired lighting through compatible software and explicitly use its save function for this custom firmware. Ordinary OpenRGB Apply is not a save. The bridge in bin implements Save to Device for this firmware.
+Flashing preserves the existing saved-settings block and does not apply or save a new color. Apply your desired lighting through compatible software and explicitly use its save function for this custom firmware. Ordinary OpenRGB Apply is not a save. The [OpenRGB bridge](../bin/README.txt) now provides Save to Device for this firmware.
 
 To test persistence, prevent RGB software from applying settings automatically, shut down and start the computer, and observe the LEDs before software applies anything. Record whether AC power was removed. A controller CPU restart alone does not establish power-loss persistence. Do not reapply a color before observing startup restoration.
 

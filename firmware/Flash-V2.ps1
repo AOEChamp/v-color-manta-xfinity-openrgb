@@ -1,6 +1,6 @@
 param(
     [string]$Python = 'python',
-    [string]$OpenRGBDir = (Join-Path $env:ProgramFiles 'OpenRGB')
+    [string]$OpenRGBDir = 'C:\Program Files\OpenRGB'
 )
 $ErrorActionPreference = 'Stop'
 $identity = [Security.Principal.WindowsIdentity]::GetCurrent()

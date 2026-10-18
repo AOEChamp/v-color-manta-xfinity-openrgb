@@ -3,17 +3,13 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 import ctypes as c
 import pathlib
-import os
 import threading
 from contextlib import contextmanager
 
 SIGNATURE = bytes.fromhex('a8 32 16 e8 8c')
 
 class PawnBus:
-    def __init__(self, directory=None, port=0):
-        if directory is None:
-            if not os.environ.get('ProgramFiles'): raise ValueError('Specify the OpenRGB installation directory')
-            directory = pathlib.Path(os.environ['ProgramFiles']) / 'OpenRGB'
+    def __init__(self, directory=r'C:\Program Files\OpenRGB', port=0):
         self.root = pathlib.Path(directory)
         self.lock = threading.RLock()
         self.dll = c.WinDLL(str(self.root / 'PawnIOLib.dll'))

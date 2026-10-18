@@ -6,7 +6,7 @@ Developed against V-COLOR Manta XFinity TMXFL1660830WWK. Observed ENE chip-ID by
 
 The 65,536-byte program-flash dump was acquired twice with identical contents. Original SHA-256: `beaa0db9a2cee7c0ad0af668fd3860b3a1b4d327f7150941d39d0f3db40c278a`.
 
-`images/vcolor-7730-e000-v2.bin` SHA-256: `0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3`. Its adjacent JSON is the deterministic build manifest. The stock dump and captured settings test fixture are included for reproduction.
+`images/vcolor-7730-e000-v2.bin` SHA-256: `0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3`. Its adjacent JSON is the deterministic build manifest. Its historical offline status describes the build stage; current hardware results are below. The stock dump and captured settings test fixture are included for reproduction.
 
 ## Controller flash specifications and memory map
 
