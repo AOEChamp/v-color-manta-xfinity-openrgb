@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+firmware/images/*install-*.json
+firmware/images/*runtime-save-*.json
+firmware/images/config-*.bin
+firmware/images/acquisition-*.json
+firmware/reports/
