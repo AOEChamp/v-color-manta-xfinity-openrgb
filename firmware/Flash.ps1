@@ -1,7 +1,6 @@
 param(
     [string]$Python = 'python',
-    [string]$OpenRGBDir = 'C:\Program Files\OpenRGB',
-    [ValidateSet('2','3')][string]$FirmwareVersion = '2'
+    [string]$OpenRGBDir = 'C:\Program Files\OpenRGB'
 )
 $ErrorActionPreference = 'Stop'
 $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -12,6 +11,6 @@ if ($competing.Count) { throw 'Close competing RGB applications before flashing.
 $OpenRGBDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OpenRGBDir)
 Push-Location $PSScriptRoot
 try {
-    & $Python tools/flash_v2.py --execute --openrgb-dir $OpenRGBDir --firmware-version $FirmwareVersion
+    & $Python tools/flash.py --execute --openrgb-dir $OpenRGBDir
     if ($LASTEXITCODE -ne 0) { throw 'Flash failed. Preserve the report and follow FLASHING.md failure guidance.' }
 } finally { Pop-Location }

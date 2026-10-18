@@ -170,7 +170,7 @@ def main():
     bus = PawnBus(settings['openrgb_dir'], settings['smbus_port'])
     try:
         devices = discover(bus)
-        for d in devices: logging.info('Matched V-Color DIMM at 0x%02X, 8 LEDs; save available (E000 v2 assumed)', d.address)
+        for d in devices: logging.info('Matched V-Color DIMM at 0x%02X, 8 LEDs; save available (patched E000 assumed)', d.address)
         if args.color:
             color = tuple(bytes.fromhex(args.color))
             for d in devices: d.apply([color]*8, mode=1)

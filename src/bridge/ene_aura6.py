@@ -1,6 +1,6 @@
 """Native ENE Aura 6 control through the PawnIO installation supplied by OpenRGB.
 No vendor DLLs, address remapping, or firmware updates.
-Explicit saves require the patched E000 v2 firmware.
+Explicit saves require the patched E000 firmware.
 SPDX-License-Identifier: GPL-2.0-or-later
 """
 import ctypes as c

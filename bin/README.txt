@@ -14,7 +14,7 @@ itself at its recorded location, including portable installations.
 
 Open OpenRGB normally and accept its administrator prompt. RAM devices are
 added automatically through the saved localhost connection. Save to Device
-assumes patched E000 v2 firmware; ordinary Apply does not persist lighting.
+assumes patched E000 firmware; ordinary Apply does not persist lighting.
 The bridge never pauses or stops other RGB applications or their services.
 
 LIGHTING MODES
@@ -22,7 +22,7 @@ Choose Direct, Static, Off, Breathing, Flashing, Spectrum Cycle, Rainbow,
 Chase Fade, Chase Fade Rainbow, Chase, Chase Rainbow, Random Flicker, Stack,
 Pong or Fill Up in the RAM device's mode list. Hardware effects have a speed
 slider. Fixed-color effects also expose per-LED colors. Save to Device stores
-the effect and speed on patched E000 v2 firmware.
+the effect and speed on patched E000 firmware.
 Static and Rainbow have been visually tested on this RAM; the other effects
 are firmware-confirmed but still need visual confirmation.
 

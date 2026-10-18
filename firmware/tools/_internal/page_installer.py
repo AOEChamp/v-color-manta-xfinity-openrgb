@@ -9,9 +9,8 @@ READS = sorted({p + delta for p in ORDER for delta in (-128, 0, 128)} |
                {0, 0xE000, 0xE080, 0xE100})
 
 
-def install(bus, report, save, expected=None, preserve_settings=False):
+def install(bus, report, save):
     original = SOURCE.read_bytes()
-    baseline = original if expected is None else expected
     candidate, manifest = build(original)
     if OUTPUT.read_bytes() != candidate:
         raise RuntimeError('Candidate file differs from reproducible build')
@@ -88,9 +87,7 @@ def install(bus, report, save, expected=None, preserve_settings=False):
     before = {}
     for address in READS:
         before[address] = request(0x30, address)
-        if preserve_settings and 0xE000 <= address < 0xE180:
-            continue
-        if before[address] != baseline[address:address+128]:
+        if before[address] != original[address:address+128]:
             raise RuntimeError(f'Original page mismatch at {address:#x}; no flash writes sent')
     report['original_pages'] = {hex(a): b.hex() for a, b in before.items()}
     save()
@@ -108,11 +105,8 @@ def install(bus, report, save, expected=None, preserve_settings=False):
             save()
         # Independent second pass includes neighboring pages, vector and settings.
         for address in READS:
-            expected_page = before[address] if preserve_settings and 0xE000 <= address < 0xE180 else candidate[address:address+128]
-            if request(0x30, address) != expected_page:
+            if request(0x30, address) != candidate[address:address+128]:
                 raise RuntimeError(f'Final verification mismatch at {address:#x}')
-        if preserve_settings:
-            report['saved_settings_preserved'] = True
         report['all_bounded_readbacks_match_candidate'] = True
         report['verified_read_bytes_per_pass'] = len(READS) * 128
         report['status'] = 'candidate-installed-and-verified-before-exit'

@@ -12,21 +12,21 @@ Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the bridge, and othe
 ## 1. Run the flashing script
 
 ```powershell
-.\firmware\Flash-V2.ps1
+.\firmware\Flash.ps1
 ```
 
 For a portable or custom OpenRGB installation:
 
 ```powershell
-.\firmware\Flash-V2.ps1 -OpenRGBDir 'D:\Apps\OpenRGB'
+.\firmware\Flash.ps1 -OpenRGBDir 'D:\Apps\OpenRGB'
 ```
 
-The direct Python equivalent is `python firmware/tools/flash_v2.py --execute --openrgb-dir 'D:\Apps\OpenRGB'`. Relative installation paths are resolved from the directory where you launch the command, including when using the PowerShell launcher.
+The direct Python equivalent is `python firmware/tools/flash.py --execute --openrgb-dir 'D:\Apps\OpenRGB'`. Relative installation paths are resolved from the directory where you launch the command, including when using the PowerShell launcher.
 
 If Python is not on PATH:
 
 ```powershell
-.\firmware\Flash-V2.ps1 -Python 'C:\Path\To\python.exe'
+.\firmware\Flash.ps1 -Python 'C:\Path\To\python.exe'
 ```
 
 The script lists responding RGB controllers with hardware identity, SMBus address, chip ID, signature, and support status. It also lists Windows DIMM slot/manufacturer/part names. Enter the **number of the controller you want to flash**, or press Enter to cancel. Only one controller is flashed per run. No address argument is required. It rechecks discovery after your selection, then performs the stock-image preflight before programming. Already-patched firmware fails stock preflight; this tool is not a reinstall or rollback utility.
@@ -43,7 +43,7 @@ A successful run prints:
 Firmware installed and verified. Application resumed; saved settings preserved.
 ```
 
-The full JSON report is saved to `firmware/reports/v2-install-<UTC timestamp>.json`; the tool prints its exact path. Generated reports are ignored by Git.
+The full JSON report is saved to `firmware/reports/install-<UTC timestamp>.json`; the tool prints its exact path. Generated reports are ignored by Git.
 
 Check that the process exited successfully, the report has no `error`, and these fields are true:
 
@@ -55,20 +55,6 @@ Check that the process exited successfully, the report has no `error`, and these
 `control_present` says whether another compatible controller was available as a control. If present, `control_unchanged` must also be true. With only one controller, there is no independent control observation.
 
 After verifying the result, rerun the launcher and select a different supported stock controller if needed.
-
-## Upgrade v2 to v3: stored-color Random Flicker
-
-E000 v3 retains v2 persistence and makes mode 13 use each LED's stored color instead of generating its own hues. Use the current bridge for Random Flicker's color controls. The upgrade is available in this repository; the v2 release ZIP does not contain it.
-
-With the same prerequisites and RGB applications closed, run from the repository root in administrator PowerShell:
-
-```powershell
-.\firmware\Flash-V3.ps1
-```
-
-The launcher accepts the same `-Python` and `-OpenRGBDir` options as the v2 launcher. Select one controller per run. This command upgrades only the exact bundled v2 image to v3; stock controllers must first receive v2. Already-v3, mismatched or partially modified firmware is rejected before flash writes. Reports use `firmware/reports/v3-install-<UTC timestamp>.json`.
-
-Only pages `3480` (Random Flicker renderer) and `2000` (checksums, written last) are programmed. The existing saved-settings bytes are captured and verified unchanged; they need not match the reference image. Check the usual success fields above plus `saved_settings_preserved`. The same incomplete-update and uncertain-mailbox guards apply.
 
 ## Save lighting and check persistence
 

@@ -1,8 +1,7 @@
 """Compare original/patched Random Flicker using actual ARM code, offline only."""
 import json
 import struct
-from firmware_image import build as build_v2
-from firmware_v3 import build, SOURCE, ROOT, OUTPUT
+from firmware_image import build, SOURCE, ROOT, OUTPUT
 from arm_emulator import Machine
 from test_firmware import cold_start
 from unicorn import UC_HOOK_CODE
@@ -34,7 +33,7 @@ def frame(m, dispatch=False):
 
 def run():
     original = SOURCE.read_bytes()
-    parent, _ = build_v2(original)
+    parent = original
     candidate, manifest = build(original)
     assert OUTPUT.read_bytes() == candidate
     Machine(candidate).boot_checks()
@@ -92,9 +91,9 @@ def run():
         passed=['original ignores stored colors', 'per-LED stored RBG scaling',
                 'red/green/blue/black/white/mixed frames', 'identical random choices and counters',
                 'source buffer and neighboring bytes unchanged', 'actual mode13 dispatch',
-                'v2 LED-count fix retained', 'save/startup mode13 and colors', 'firmware/header checksums'],
+                'LED-count fix retained', 'save/startup mode13 and colors', 'firmware/header checksums'],
         limitation='No hardware flash or visible-output test; changes existing mode13 behavior')
-    (ROOT.parent/'reports/e000-v3-flicker-tests.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+    (ROOT.parent/'reports/e000-flicker-tests.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
     print(json.dumps(result,indent=2))
 
 

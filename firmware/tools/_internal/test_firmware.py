@@ -1,4 +1,4 @@
-"""Execute v2 startup/save code offline, including the actual saved red block."""
+"""Execute final startup/save code offline, including the captured saved red block."""
 import hashlib
 import json
 from patch_storage import build as build_v1, SOURCE, ROOT
@@ -78,7 +78,7 @@ def run():
         raise AssertionError('Builder accepted a non-original image')
     result = dict(hardware_access=False, candidate_sha256=hashlib.sha256(candidate).hexdigest(),
         passed=['v1 count-layout bug reproduced with captured hardware save',
-                'v2 restores actual saved red and count 0008', 'engine channel count 1 and LED count 8',
+                'restores actual saved red and count 0008', 'engine channel count 1 and LED count 8',
                 'AA save and fresh startup roundtrip', 'counts 1,8,16',
                 '02/55 erase paths', 'invalid settings fallback',
                 'actual ARM firmware/header checksum validators and corruption rejection',
@@ -86,5 +86,5 @@ def run():
         limitation='CPU and flash effects simulated; visible output and power-loss behavior untested')
     reports = ROOT.parent / 'reports'
     reports.mkdir(exist_ok=True)
-    (reports / 'e000-v2-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+    (reports / 'e000-firmware-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))
