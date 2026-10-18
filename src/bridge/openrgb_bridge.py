@@ -10,6 +10,7 @@ import sys
 from config import VERSION, load_config, find_openrgb
 from client_settings import configure_client, settings_path
 from ene_aura6 import PawnBus, discover
+from modes import MODES, SPEED_NORMAL, SPEED_SLOWEST, SPEED_FASTEST, validate_mode
 
 U32 = lambda v: struct.pack('<I', v)
 U16 = lambda v: struct.pack('<H', v)
@@ -18,13 +19,16 @@ def string(value):
     data = value.encode('utf-8') + b'\0'
     return U16(len(data)) + data
 
-def mode_description(index):
-    name = ('Direct', 'Static', 'Off')[index]
+def mode_description(index, speed=None):
+    spec = MODES[index]
+    if speed is None:
+        speed = SPEED_NORMAL if spec.animated else 0
     # value, flags, speed min/max, brightness min/max, color min/max,
     # speed, brightness, direction, color mode; zero mode-specific colors.
-    fields = (1 if index < 2 else 0, (32 if index < 2 else 0) | 256,
-              0, 0, 0, 0, 0, 0, 0, 0, 0, 1 if index < 2 else 0)
-    return string(name) + struct.pack('<12I', *fields) + U16(0)
+    fields = (spec.value, (32 if spec.colors else 0) | 256 | (1 if spec.animated else 0),
+              SPEED_SLOWEST if spec.animated else 0, SPEED_FASTEST, 0, 0, 0, 0,
+              speed, 0, 0, 1 if spec.colors else 0)
+    return string(spec.name) + struct.pack('<12I', *fields) + U16(0)
 
 def description(device):
     with device.lock:
@@ -33,8 +37,8 @@ def description(device):
                   'Native ENE Aura 6; TMXFL1660830WWK', 'A8 32 16 E8 8C',
                   f'ENE-{device.address:02X}', f'PIIX4 port {getattr(device.bus, "port", 0)}, address 0x{device.address:02X}'):
             data += string(s)
-        data += U16(3) + U32(device.mode)
-        data += b''.join(mode_description(i) for i in range(3))
+        data += U16(len(MODES)) + U32(device.mode)
+        data += b''.join(mode_description(i, device.speeds[i]) for i in range(len(MODES)))
         data += U16(1) + string('DIMM') + struct.pack('<4I', 1, 8, 8, 8) + U16(0)
         data += U16(8)
         for i in range(8): data += string(f'LED {i+1}') + U32(i)
@@ -77,17 +81,19 @@ def update(device, packet, data):
         elif packet in (1101, 1102):
             if len(data) < 10: raise ValueError('Truncated mode')
             mode = struct.unpack_from('<I', data, 4)[0]
-            if mode > 2: raise ValueError('Invalid mode')
+            if mode >= len(MODES): raise ValueError('Invalid mode')
             n = struct.unpack_from('<H', data, 8)[0]
             if n < 1 or len(data) != 10+n+50 or data[10+n-1] != 0:
                 raise ValueError('Invalid mode descriptor')
             if struct.unpack_from('<H', data, 10+n+48)[0] != 0:
                 raise ValueError('Mode-specific colors unsupported')
+            speed = struct.unpack_from('<I', data, 10+n+32)[0]
+            validate_mode(mode, speed)
             if packet == 1102:
-                device.save(mode=mode)
+                device.save(mode=mode, speed=speed)
                 logging.info('Save requested for V-Color DIMM at 0x%02X', device.address)
             else:
-                device.apply(mode=mode)
+                device.apply(mode=mode, speed=speed)
 
 class Handler(socketserver.BaseRequestHandler):
     def handle(self):

@@ -56,6 +56,20 @@ Check that the process exited successfully, the report has no `error`, and these
 
 After verifying the result, rerun the launcher and select a different supported stock controller if needed.
 
+## Upgrade v2 to v3: stored-color Random Flicker
+
+E000 v3 retains v2 persistence and makes mode 13 use each LED's stored color instead of generating its own hues. Use the current bridge for Random Flicker's color controls. The upgrade is available in this repository; the v2 release ZIP does not contain it.
+
+With the same prerequisites and RGB applications closed, run from the repository root in administrator PowerShell:
+
+```powershell
+.\firmware\Flash-V3.ps1
+```
+
+The launcher accepts the same `-Python` and `-OpenRGBDir` options as the v2 launcher. Select one controller per run. This command upgrades only the exact bundled v2 image to v3; stock controllers must first receive v2. Already-v3, mismatched or partially modified firmware is rejected before flash writes. Reports use `firmware/reports/v3-install-<UTC timestamp>.json`.
+
+Only pages `3480` (Random Flicker renderer) and `2000` (checksums, written last) are programmed. The existing saved-settings bytes are captured and verified unchanged; they need not match the reference image. Check the usual success fields above plus `saved_settings_preserved`. The same incomplete-update and uncertain-mailbox guards apply.
+
 ## Save lighting and check persistence
 
 Flashing preserves the existing saved-settings block and does not apply or save a new color. Apply your desired lighting through compatible software and explicitly use its save function for this custom firmware. Ordinary OpenRGB Apply is not a save. The [OpenRGB bridge](../bin/README.txt) now provides Save to Device for this firmware.

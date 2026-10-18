@@ -8,6 +8,8 @@ import final_installer as stock
 import test_firmware as firmware_test
 import test_installer as installer_test
 import test_dimm_selection as selection_test
+import test_flicker as flicker_test
+import test_upgrade_v3 as upgrade_test
 
 if __name__ == '__main__':
     selection_test.run()
@@ -15,5 +17,8 @@ if __name__ == '__main__':
     with patch.multiple(installer_test.installer, build=final.build,
                         OUTPUT=final.OUTPUT, ORDER=stock.ORDER, READS=stock.READS):
         installer_test.run()
+
+    flicker_test.run()
+    upgrade_test.run()
 
     print('All offline firmware, selection, and installer checks passed. No hardware was accessed.')

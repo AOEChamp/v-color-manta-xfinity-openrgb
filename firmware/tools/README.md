@@ -5,7 +5,9 @@ Run these commands from the repository root. Hardware tools require Windows, adm
 | Command | Purpose | Hardware changes |
 | --- | --- | --- |
 | `.\firmware\Flash-V2.ps1` | Discover controllers, select one, and install the final firmware | Programs the selected RGB controller |
+| `.\firmware\Flash-V3.ps1` | Upgrade one selected controller from exact v2 to stored-color Random Flicker v3 | Programs two RGB firmware pages; preserves saved settings |
 | `python firmware/tools/build_firmware.py` | Reproduce the final binary and manifest from the stock reference | None |
+| `python firmware/tools/build_firmware.py --version 3` | Reproduce the v3 binary and manifest from the stock reference | None |
 | `python firmware/tools/validate_final.py` | Run emulation, discovery/selection, and installer fault tests | None |
 | `python firmware/tools/analyze_firmware.py <image.bin>` | Write focused ARM Thumb disassembly beside the input image | None |
 

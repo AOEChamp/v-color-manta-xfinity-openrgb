@@ -52,13 +52,19 @@ class TargetBus:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true', required=True)
+    parser.add_argument('--firmware-version', choices=('2', '3'), default='2',
+                        help='2: stock to v2; 3: exact v2 to v3 with stored-color flicker')
     parser.add_argument('--openrgb-dir', type=Path, default=Path(r'C:\Program Files\OpenRGB'),
                         help='OpenRGB directory containing PawnIOLib.dll and SmbusPIIX4.bin')
     args = parser.parse_args()
+    if args.firmware_version == '3':
+        import upgrade_v3 as selected_installer
+    else:
+        selected_installer = stock
     report = {}
     reports = ROOT.parent / 'reports'
     reports.mkdir(exist_ok=True)
-    path = reports / ('v2-install-' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + '.json')
+    path = reports / ('v' + args.firmware_version + '-install-' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + '.json')
     bus = None
     physical = None
     def save():
@@ -70,7 +76,7 @@ def main():
         target = choose(rows)  # Prompt without holding the shared SMBus mutex.
         others = [r['address'] for r in rows if r['compatible_identity'] and r['address'] != target]
         bus = TargetBus(physical, target, others[0] if others else None)
-        report.update(target='0x71', source='stock', discovered=rows, status='starting')
+        report.update(target='0x71', source='v2' if args.firmware_version == '3' else 'stock', discovered=rows, status='starting')
         if others:
             report['control'] = '0x73'
         save()
@@ -81,7 +87,7 @@ def main():
             if discover(physical) != rows:
                 raise RuntimeError('Controller identities changed after selection; no flash attempted')
             before = [snapshot(physical, a) for a in others]
-            boot.run(bus, report, save, cpu_only=True, verified_action=stock.install, control=bool(others))
+            boot.run(bus, report, save, cpu_only=True, verified_action=selected_installer.install, control=bool(others))
             report['all_other_modules_unchanged'] = before == [snapshot(physical, a) for a in others]
             save()
             if not report['all_other_modules_unchanged']:

@@ -8,6 +8,7 @@ import pathlib
 import threading
 import logging
 from contextlib import contextmanager
+from modes import MODES, SPEED_NORMAL, validate_mode
 
 SIGNATURE = bytes.fromhex('a8 32 16 e8 8c')
 LED_COUNT = 8
@@ -105,28 +106,37 @@ class Dimm:
             if bus.read(address, 0xB500, 5) != SIGNATURE:
                 raise ValueError('Unrecognized ENE firmware; writes disabled')
             data = bus.read(address, 0xE300, 24)
+            control = bus.read(address, 0xE020, 4)
         self.colors = [(data[i], data[i+2], data[i+1]) for i in range(0, 24, 3)]
-        self.mode = 1
+        self.mode = next((i for i, spec in enumerate(MODES) if spec.animated and spec.value == control[1]), 1)
+        self.speeds = [SPEED_NORMAL if spec.animated else 0 for spec in MODES]
+        if MODES[self.mode].animated and 0 <= control[2] <= 4:
+            self.speeds[self.mode] = control[2]
 
-    def apply(self, colors=None, mode=None, persist=False):
+    def apply(self, colors=None, mode=None, persist=False, speed=None):
         with self.lock:
             next_colors = list(self.colors if colors is None else colors)
             next_mode = self.mode if mode is None else mode
-            if next_mode not in (0, 1, 2): raise ValueError('Unsupported mode')
+            if type(next_mode) is not int or not 0 <= next_mode < len(MODES):
+                raise ValueError('Unsupported mode')
+            next_speed = self.speeds[next_mode] if speed is None else speed
+            validate_mode(next_mode, next_speed)
             frame = color_frame(next_colors)  # Validate even in Off mode.
             if next_mode == 2: frame = bytes(24)
             with self.bus.transaction():
                 self.bus.block(self.address, 0xE300, frame)
-                self.bus.block(self.address, 0xE020, bytes([0, 1, 0, 0]))
+                hardware_mode = 1 if next_mode == 2 else MODES[next_mode].value
+                self.bus.block(self.address, 0xE020, bytes([0, hardware_mode, next_speed, 0]))
                 self.bus.select(self.address, 0xE02F)
                 self.bus.transfer(self.address, 0, 1, 2, 1)
                 if persist:
                     self.bus.select(self.address, 0xE0A0)
                     self.bus.transfer(self.address, 0, 1, 2, 0xAA)
             self.colors, self.mode = next_colors, next_mode
+            self.speeds[next_mode] = next_speed
 
-    def save(self, mode=None):
-        self.apply(mode=mode, persist=True)
+    def save(self, mode=None, speed=None):
+        self.apply(mode=mode, speed=speed, persist=True)
 
 def discover(bus):
     devices = []

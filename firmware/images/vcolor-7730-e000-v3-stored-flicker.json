@@ -1,0 +1,20 @@
+{
+  "version": "E000 v3 stored-color Random Flicker",
+  "hardware_access": false,
+  "parent_sha256": "0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3",
+  "candidate_sha256": "43a01f0446d3069e3057d5a0ec8c3c176a0dc1be262fba7cb9ee916333feb105",
+  "application_checksum": "0xffc45922",
+  "header_checksum": "0x46f",
+  "changed_pages_from_v2": [
+    "0x2000",
+    "0x3480"
+  ],
+  "patch": {
+    "address": "0x34a8",
+    "before": "019803f085fa0090684600786a00aa18a1698854684640786a00aa18a16989184870684680786a00aa18a16989188870",
+    "after": "6069032169434018a3695b1803216a46927906785643360a1e70013001330139f7d100bf00bf00bf00bf00bf00bf00bf"
+  },
+  "behavior": "Mode13: output[i,c] = stored[i,c] * intensity[i] >> 8; intensity remains 16 or128",
+  "settings_format_unchanged": true,
+  "status": "Reproducible offline build; hardware validation is documented separately"
+}

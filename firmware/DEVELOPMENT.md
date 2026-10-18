@@ -40,7 +40,7 @@ The validated dump path enables bit 0 of register `0410`, selects the flash addr
 
 Disassembly identified dispatcher `4138`, serializer `6AB0`, startup `420C`, restore `6E0C`, validator `6E90`, and internal page writer `3624`. Command `AA` at live register `E0A0` invokes save. The memory map and hardware probes above explain why the stock upper-address destinations were replaced with the validated lower-flash block at `E000`.
 
-## Final firmware changes
+## E000 v2 persistence changes
 
 The final firmware makes the existing AA save command and startup restore use the same 384-byte storage block at `E000..E17F`. Existing settings-erase paths use this block too. The saved channel and LED counts restore to the correct live registers: channels at `E0A1`, zero at `E0A2`, and LED count at `E0A3`. One channel/eight LEDs therefore restores as `01 00 08`.
 
@@ -49,6 +49,18 @@ The patch preserves the settings format and color arrays. Both the application c
 Only six 128-byte firmware pages differ from stock: `2000`, `4180`, `4200`, `6B00`, `6E00`, `6E80`. The installer writes the checksum/header page last and preserves live settings rather than flashing the entire 64 KiB image.
 
 ## Reproduce and validate offline
+
+### E000 v3: stored-color Random Flicker
+
+`images/vcolor-7730-e000-v3-stored-flicker.bin` has SHA-256 `43a01f0446d3069e3057d5a0ec8c3c176a0dc1be262fba7cb9ee916333feb105`. Build it with `python tools/build_firmware.py --version 3`. The original-image hash guard and all v2 persistence fixes remain in place.
+
+V3 replaces only the color-output instructions at `34A8..34D7`: each LED's stored R,B,G bytes are multiplied by that LED's existing random intensity and shifted right eight bits. Intensities remain 16 and 128; random choices, counters, iteration and speed are unchanged. The only pages changed from v2 are `3480` and the checksum/header page `2000`. Settings format, identity strings and bootloader are unchanged.
+
+`validate_final.py` includes 384 paired original/patched ARM-renderer frames covering red, green, blue, black, white and mixed per-LED colors; it verifies identical random state/counters, source-buffer and adjacent-byte preservation, mode-13 dispatch, save/startup roundtrips and checksums. Fourteen upgrade cases cover both selected DIMM addresses, settings preservation, stock/already-v3/mismatched preflight rejection, readback errors, explicit bootloader errors and uncertain completion. These are offline checks and do not establish visible output or power-loss behavior.
+
+`Flash-V3.ps1` uses the existing bounded writer with exact v2 preflight, captures live saved settings and verifies them unchanged, writes only the two changed pages (checksum last), and retains the incomplete-update/CPU-exit guards. It does not apply lighting or issue a save command.
+
+### Commands
 
 From this firmware directory, using Python 3.12 (the development version):
 

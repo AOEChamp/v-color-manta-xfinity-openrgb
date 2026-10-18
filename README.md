@@ -7,7 +7,7 @@ There are two parts to that goal:
 - **OpenRGB control:** let OpenRGB set the RAM's lighting and send an explicit save command.
 - **Persistent colors:** repair the controller's save and startup-restore routines so it can restore the saved lighting when it starts, without waiting for RGB software to reapply it.
 
-This repository includes the **E000 v2 firmware patch**, reproducible build tools, offline tests, a Windows flashing tool, and a Windows OpenRGB bridge. The bridge provides lighting control and Save to Device; persistent colors require the firmware patch. Flashing the firmware fixes persistence; it does not by itself add a device to OpenRGB.
+This repository includes the **E000 v2 persistence fix** and **E000 v3 stored-color Random Flicker upgrade**, reproducible build tools, offline tests, Windows flashing tools, and a Windows OpenRGB bridge. The bridge provides lighting control and Save to Device; persistent colors require the firmware patch. Flashing the firmware fixes persistence; it does not by itself add a device to OpenRGB.
 
 ## What the firmware fixes
 
@@ -38,7 +38,15 @@ The installer copies the bridge to `%LOCALAPPDATA%\Programs\VColorOpenRGBBridge`
 
 See [bridge setup, configuration and removal](bin/README.txt) for portable OpenRGB paths, custom settings files, logs, and uninstalling. See [bridge development](src/README.md) for source and build instructions. The bridge does not flash firmware; use the separate instructions below.
 
+### Lighting modes
+
+The RAM mode list includes Direct, Static and Off, plus the firmware effects: Breathing, Flashing, Spectrum Cycle, Rainbow, Chase Fade (fixed-color and rainbow), Chase (fixed-color and rainbow), Random Flicker, Stack, Pong and Fill Up. Hardware effects expose a speed slider; fixed-color effects also expose per-LED colors. Random Flicker exposes color control for firmware with the mode 13 color patch; older firmware may ignore these colors. Save to Device stores the selected effect and speed with E000 v2 firmware.
+
+Effect IDs are confirmed from the firmware dispatcher. Static, Rainbow and fixed-color Chase have been visually tested. Other effect names and the speed range follow the related ENE controller. E000 v3 changes Random Flicker to scale each LED's stored color by the existing random intensity, retaining its timing and speed behavior. There is no dedicated lightning/storm mode.
+
 ## Quick flashing
+
+For **stored-color Random Flicker**, install v2 first if starting from stock, then run `firmware/Flash-V3.ps1` from this repository to upgrade v2 to v3. The v3 upgrade writes only the renderer and checksum pages and preserves saved settings. It requires the exact bundled v2 firmware; it rejects stock, already-v3 and mismatched firmware. See [v3 upgrade instructions](firmware/FLASHING.md#upgrade-v2-to-v3-stored-color-random-flicker). The v2 download below remains the persistence-only flasher.
 
 Download the [flash ZIP](https://github.com/AOEChamp/v-color-manta-xfinity-openrgb/releases/latest/download/VColor-E000-v2-Flasher-Windows-x64.zip), extract it, and follow these instructions from the extracted folder. It contains only the flashing files and instructions; Python and OpenRGB are installed separately.
 
