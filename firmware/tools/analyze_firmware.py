@@ -6,7 +6,6 @@ import re
 import struct
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parent / 'pylibs'))
 import capstone
 
 parser = argparse.ArgumentParser(description=__doc__)

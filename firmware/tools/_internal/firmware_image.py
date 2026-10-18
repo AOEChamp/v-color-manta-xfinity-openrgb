@@ -2,7 +2,7 @@
 import hashlib
 import json
 import struct
-from build_e000_firmware import build as build_v1, SOURCE, ROOT
+from patch_storage import build as build_v1, SOURCE, ROOT
 
 OUTPUT = ROOT / 'vcolor-7730-e000-v2.bin'
 RESTORE = 0x6E4E
@@ -41,8 +41,3 @@ def build(original):
     return bytes(image), manifest
 
 
-if __name__ == '__main__':
-    image, manifest = build(SOURCE.read_bytes())
-    OUTPUT.write_bytes(image)
-    OUTPUT.with_suffix('.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
-    print(json.dumps(manifest, indent=2))

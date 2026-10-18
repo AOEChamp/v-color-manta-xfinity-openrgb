@@ -4,10 +4,9 @@ import struct
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent / 'pylibs'))
 from unicorn import Uc, UC_ARCH_ARM, UC_MODE_THUMB, UC_MODE_MCLASS, UC_HOOK_CODE, UC_HOOK_MEM_WRITE
 from unicorn.arm_const import UC_ARM_REG_SP, UC_ARM_REG_LR, UC_ARM_REG_PC, UC_ARM_REG_R0, UC_ARM_REG_R1, UC_ARM_REG_R2
-from build_e000_firmware import build, SOURCE, ROOT
+from patch_storage import build, SOURCE, ROOT
 
 
 class Machine:
@@ -135,5 +134,3 @@ def run():
     print(json.dumps(report, indent=2))
 
 
-if __name__ == '__main__':
-    run()

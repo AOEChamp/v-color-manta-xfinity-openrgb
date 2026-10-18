@@ -9,8 +9,8 @@ import json
 import pathlib
 import struct
 import time
-from snapshot_retry import module
-from probe_firmware_read import snapshot
+import transport as module
+from identity import snapshot
 
 TARGET = 0x71
 EXPECTED_VECTOR = bytes.fromhex('001a0020d5000000dd000000df000000')
@@ -107,38 +107,3 @@ def acquire(bus, report, save, folder, stamp):
             raise RuntimeError('Register restoration check failed; inspect acquisition log')
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--execute', action='store_true', required=True)
-    parser.parse_args()
-    now = datetime.datetime.now(datetime.timezone.utc)
-    stamp = now.strftime('%Y%m%dT%H%M%S%fZ')
-    folder = pathlib.Path(__file__).resolve().parents[1] / 'evidence' / 'ram-firmware'
-    folder.mkdir(exist_ok=True)
-    log = folder / f'acquisition-{stamp}.json'
-    report = dict(utc=now.isoformat(), target='0x71', control='0x73', status='starting',
-                  read_command='0x13', read_commands=0, control_writes=0,
-                  erase_program_save_reset_commands=False)
-
-    def save():
-        log.write_text(json.dumps(report, indent=2), encoding='utf-8')
-
-    bus = None
-    try:
-        save()
-        bus = module.PawnBus()
-        with bus.transaction():
-            acquire(bus, report, save, folder, stamp)
-    except BaseException as exc:
-        report['error'] = str(exc)
-        save()
-        raise
-    finally:
-        if bus is not None:
-            bus.close()
-        print(log, flush=True)
-    print(json.dumps(report, indent=2))
-
-
-if __name__ == '__main__':
-    main()

@@ -1,9 +1,9 @@
 """Execute v2 startup/save code offline, including the actual saved red block."""
 import hashlib
 import json
-from build_e000_firmware import build as build_v1, SOURCE, ROOT
-from build_e000_v2_firmware import build, OUTPUT
-from test_e000_firmware import Machine
+from patch_storage import build as build_v1, SOURCE, ROOT
+from firmware_image import build, OUTPUT
+from arm_emulator import Machine
 
 
 def cold_start(image, block, topology=16):
@@ -89,5 +89,3 @@ def run():
     print(json.dumps(result, indent=2))
 
 
-if __name__ == '__main__':
-    run()

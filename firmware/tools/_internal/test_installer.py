@@ -1,7 +1,7 @@
 """Exercise installer and reset guards with a fake bus; no physical hardware."""
 import json
 from unittest.mock import patch
-import install_e000_firmware as installer
+import page_installer as installer
 
 
 class FakeBus:
@@ -90,5 +90,3 @@ def run():
     print(json.dumps(result, indent=2))
 
 
-if __name__ == '__main__':
-    run()

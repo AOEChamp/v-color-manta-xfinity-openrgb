@@ -22,12 +22,12 @@ class PawnBus:
         self.dll = c.WinDLL(str(self.root / 'PawnIOLib.dll'))
         self.handle = c.c_void_p()
         self.kernel = c.WinDLL('kernel32', use_last_error=True)
-        self.kernel.CreateMutexW.argtypes = [c.c_void_p, c.c_bool, c.c_wchar_p]
-        self.kernel.CreateMutexW.restype = c.c_void_p
+        self.kernel.CreateMutexExW.argtypes = [c.c_void_p, c.c_wchar_p, c.c_uint32, c.c_uint32]
+        self.kernel.CreateMutexExW.restype = c.c_void_p
         self.kernel.WaitForSingleObject.argtypes = [c.c_void_p, c.c_uint32]
         self.kernel.ReleaseMutex.argtypes = [c.c_void_p]
         self.kernel.CloseHandle.argtypes = [c.c_void_p]
-        self.mutex = self.kernel.CreateMutexW(None, False, r'Global\Access_SMBUS.HTP.Method')
+        self.mutex = self.kernel.CreateMutexExW(None, r'Global\Access_SMBUS.HTP.Method', 0, 0x00100001)
         if not self.mutex: raise c.WinError(c.get_last_error())
         self.dll.pawnio_open.argtypes = [c.POINTER(c.c_void_p)]
         self.dll.pawnio_load.argtypes = [c.c_void_p, c.c_void_p, c.c_size_t]

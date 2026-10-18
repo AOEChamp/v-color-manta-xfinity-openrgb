@@ -1,12 +1,7 @@
 """Install the exact E000 candidate on 0x71 in one bootloader session only."""
-import argparse
-import datetime
-import hashlib
-import json
 import time
-from build_e000_firmware import build, SOURCE, OUTPUT, ROOT
-import probe_bootloader_mailbox as boot
-from snapshot_retry import module
+from patch_storage import build, SOURCE, OUTPUT, ROOT
+import bootloader as boot
 
 ORDER = (0x4180, 0x4200, 0x6B00, 0x6E80, 0x2000)
 WP = (0x444, 0x44C, 0x454)
@@ -133,34 +128,3 @@ def install(bus, report, save):
         save()
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--execute', action='store_true', required=True)
-    parser.parse_args()
-    now = datetime.datetime.now(datetime.timezone.utc)
-    path = ROOT / ('e000-install-' + now.strftime('%Y%m%dT%H%M%S%fZ') + '.json')
-    report = dict(utc=now.isoformat(), target='0x71', control='0x73',
-                  full_firmware_read=False, lighting_writes=False, status='starting')
-
-    def save():
-        path.write_text(json.dumps(report, indent=2), encoding='utf-8')
-
-    bus = None
-    try:
-        save()
-        bus = module.PawnBus()
-        with bus.transaction():
-            boot.run(bus, report, save, cpu_only=True, verified_action=install)
-    except BaseException as exc:
-        report['error'] = str(exc)
-        save()
-        raise
-    finally:
-        if bus:
-            bus.close()
-        print(path)
-        print(json.dumps({k: v for k, v in report.items() if k not in ('requests', 'original_pages', 'manifest')}, indent=2))
-
-
-if __name__ == '__main__':
-    main()

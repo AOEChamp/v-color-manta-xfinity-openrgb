@@ -1,8 +1,11 @@
 """List RGB controllers in the validated 70..73 address range without applying lighting."""
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent / '_internal'))
 import argparse
 import json
 import subprocess
-from snapshot_retry import module
+import transport as module
 
 ADDRESSES = tuple(range(0x70, 0x74))
 
@@ -62,7 +65,7 @@ def choose(rows, input_fn=input):
     return row['address']
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.parse_args()
     bus = module.PawnBus()
@@ -72,3 +75,11 @@ if __name__ == '__main__':
         display(rows)
     finally:
         bus.close()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (OSError, RuntimeError, ValueError, KeyboardInterrupt) as exc:
+        print(f'Discovery stopped: {exc}', file=sys.stderr)
+        raise SystemExit(1)

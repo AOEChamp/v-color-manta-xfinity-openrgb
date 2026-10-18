@@ -23,11 +23,12 @@ python firmware/tools/list_dimms.py
 
 The selector shows the RGB controller's hardware identity and SMBus address. Windows DIMM slot/manufacturer/part names are also listed; Windows does not reliably map those slots to RGB addresses, so the tool does not guess that association. Discovery checks only RGB addresses `0x70..0x73` on PIIX4 port 0. A matching identity is not proof of compatible stock firmware; the installer retains its stock-page preflight.
 
-Flash one selected module per run, then check the generated report before repeating for another module. Keep power stable. See the full flashing guide below for prerequisites, verification, and failure handling.
+Flash one selected module per run, then check the generated report before repeating for another module. Keep power stable. Reports are saved in `firmware/reports/`. See the full flashing guide below for prerequisites, verification, and failure handling.
 
 - [Firmware development, changes, validation, and porting](firmware/DEVELOPMENT.md)
 - [Flashing and persistence testing](firmware/FLASHING.md)
+- [Supported tools and developer commands](firmware/tools/README.md)
 
-The firmware enables the existing controller save/startup-restore path. OpenRGB integration is the repository's intended scope; the complete OpenRGB controller/bridge release is not yet packaged here. The included bridge module supplies the flashing transport.
+The firmware enables the existing controller save/startup-restore path. OpenRGB integration is the repository's intended scope; the complete OpenRGB controller/bridge release is not yet packaged here. The included transport module supplies flashing access through the installed OpenRGB/PawnIO runtime.
 
 This is an independent interoperability project, with no manufacturer endorsement. See [third-party notices](THIRD_PARTY_NOTICES.md).

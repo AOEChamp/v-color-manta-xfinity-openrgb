@@ -1,32 +1,39 @@
-# Flash the final custom firmware
+# Flash the custom RGB firmware
 
-## Supported setup
+## Requirements
 
-This package supports only the exact stock image for V-COLOR TMXFL1660830WWK described in [DEVELOPMENT.md](DEVELOPMENT.md). It discovers responding RGB controllers in the validated `0x70..0x73` range on PIIX4 port 0 and lets you select one. It is not a generic DIMM updater. Already-patched firmware will fail stock preflight; do not bypass that check.
+- Supported stock firmware for V-COLOR Manta XFinity **TMXFL1660830WWK**, ENE **6K7732** RGB controller (chip-ID bytes `77 30`, signature `A8 32 16 E8 8C`). A matching identity alone does not establish firmware compatibility; the installer also checks stock firmware pages.
+- Windows x64, Python 3.12, and administrator PowerShell.
+- OpenRGB installed at `C:\Program Files\OpenRGB`, with the installed PawnIO driver, `PawnIOLib.dll`, and signed `SmbusPIIX4.bin` module. Python flashing tools require no pip packages.
+- AMD PIIX4 SMBus port 0. Discovery is limited to RGB controller addresses `0x70..0x73`. Intel transport and other bus configurations are not supported by these tools.
 
-Flashing changes the DIMM's RGB-controller program flash and can leave lighting unusable if interrupted. The supplied stock program dump is a reference backup, not a verified full-chip recovery image. Never write this image to DDR SPD.
+Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the bridge, and other RGB/SMBus software. Keep power stable. Flashing changes the RGB controller's program flash and can leave lighting unusable if interrupted. These tools do not write DDR SPD.
 
-Requirements:
+## 1. Inspect the available controllers
 
-- Windows x64, administrator PowerShell, and Python 3.12 available as `python` (or provide its full path with `-Python`).
-- OpenRGB installed at `C:\Program Files\OpenRGB`, with its installed PawnIO driver, `PawnIOLib.dll`, and signed `SmbusPIIX4.bin`.
-- Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the bridge, and any other RGB/SMBus application. Keep power stable throughout.
+Open **PowerShell as Administrator** and change to the repository root:
 
-The necessary project flashing scripts and their Python transport dependencies are included under `tools/` and `bridge/`. Flashing uses the Python standard library. The external driver/library/module come from the user's OpenRGB installation and are not bundled; copying files alone would not install the driver. No proprietary vendor flashing utility is required.
+```powershell
+python firmware/tools/list_dimms.py
+```
 
-## Verify the package
+The listing shows each responding RGB controller's hardware identity, SMBus address, chip ID, signature, and whether its identity is supported. It also lists the DIMM slot, manufacturer, and part number reported by Windows.
 
-From the repository root:
+Windows does not reliably map its DIMM slot/part names to RGB controller addresses. The tool therefore shows those inventories separately. Select by the discovered controller entry; do not infer a slot-to-address mapping. Unsupported entries cannot be selected for flashing. Discovery performs register reads and register-pointer selection; it does not apply lighting, save settings, reset the controller, or program flash.
+
+## 2. Verify the firmware file
 
 ```powershell
 Get-FileHash firmware/images/vcolor-7730-e000-v2.bin -Algorithm SHA256
 ```
 
-Expected: `0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3`.
+Expected SHA-256:
 
-## Flash one target
+```text
+0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3
+```
 
-Open PowerShell as Administrator, change to the repository root, then run:
+## 3. Select and flash one controller
 
 ```powershell
 .\firmware\Flash-V2.ps1
@@ -38,34 +45,41 @@ If Python is not on PATH:
 .\firmware\Flash-V2.ps1 -Python 'C:\Path\To\python.exe'
 ```
 
-Inspect the generated `firmware/images/v2-install-*.json`. Success requires `all_bounded_readbacks_match_candidate`, `protection_restored`, `application_resumed`, and `control_unchanged` to be true, with no error. The process must exit successfully. After checking the first target, rerun the selector to flash another supported stock module:
+The script lists the controllers again. Enter the **number of the controller you want to flash**, or press Enter to cancel. Only one controller is flashed per run. No address argument is required. It rechecks discovery after your selection, then performs the stock-image preflight before programming. Already-patched firmware fails stock preflight; this tool is not a reinstall or rollback utility.
 
-```powershell
-.\firmware\Flash-V2.ps1
+The launcher checks administrator access and common competing RGB processes. It does not automatically close applications. The Python tool uses a shared SMBus mutex and permits programming only on your selected controller.
+
+## 4. Check the result
+
+A successful run prints:
+
+```text
+Firmware installed and verified. Application resumed; saved settings preserved.
 ```
 
-Before flashing, the script lists RGB controller identities and Windows DIMM slot/manufacturer/part names, then asks for a controller number. Windows slots are not assumed to map to RGB addresses. An address adapter permits mutations only to the selected controller. Other compatible controllers are checked for unchanged state. A single compatible controller can also be selected; its report records that no control module was present. Stock preflight compares bounded firmware pages with the reference; it is not a full live-image hash. The selected identity and known boot vector are also checked, with identity revalidation after selection. Reproducible local image construction is checked before programming.
+The full JSON report is saved to `firmware/reports/v2-install-<UTC timestamp>.json`; the tool prints its exact path. Generated reports are ignored by Git.
 
-The installer enters the CPU bootloader using stop/run register `0202` and flags `0606`. It stages and verifies each complete 128-byte payload twice, writes pages `4180`, `4200`, `6B00`, `6E00`, `6E80`, then `2000`, and reads each back immediately. A second bounded verification covers changed pages, neighbors, vector and all 384 saved-settings bytes (2,304 bytes per pass). Protections are restored before application exit. It does not overwrite E000 settings or automatically apply/save lighting.
+Check that the process exited successfully, the report has no `error`, and these fields are true:
 
-## Save and check persistence
+- `all_bounded_readbacks_match_candidate`
+- `protection_restored`
+- `application_resumed`
+- `all_other_modules_unchanged`
 
-Flashing enables the controller's existing save mechanism; it does not save a chosen color. After applying the desired lighting through a compatible controller implementation, command `AA` at `E0A0` requests a runtime save. Ordinary OpenRGB apply is not a save, and this repository does not yet package a final OpenRGB Save integration.
+`control_present` says whether another compatible controller was available as a control. If present, `control_unchanged` must also be true. With only one controller, there is no independent control observation.
 
-For an explicit static-red test on target 71, close other RGB software and run from `firmware/` in administrator PowerShell:
+After verifying the result, rerun the launcher and select a different supported stock controller if needed.
 
-```powershell
-python tools/save_red_e000.py --v2 --execute
-```
+## Save lighting and check persistence
 
-This deliberately applies red, issues one save, and verifies the saved block. For target 73, the separately invoked test also performs a CPU restart:
+Flashing preserves the existing saved-settings block and does not apply or save a new color. Apply your desired lighting through compatible software and explicitly use its save function for this custom firmware. Ordinary OpenRGB Apply is not a save. A complete OpenRGB Save integration is not yet packaged in this repository.
 
-```powershell
-python tools/second_dimm_e000_v2.py --stage save-restart --execute
-```
+To test persistence, prevent RGB software from applying settings automatically, shut down and start the computer, and observe the LEDs before software applies anything. Record whether AC power was removed. A controller CPU restart alone does not establish power-loss persistence. Do not reapply a color before observing startup restoration.
 
-This applies and saves red on 73, restarts its controller CPU, and checks restored registers without reapplying lighting afterward. A CPU restart is not power removal. Inspect reports for successful verification and unchanged control module. For a power-persistence test, shut down and start the computer with RGB software prevented from applying settings; observe visible output. Record whether AC power was removed. Do not reapply a color before observing startup restoration.
+## If flashing stops or fails
 
-## If an operation fails
+Keep the JSON report and console error. Do not bypass stock preflight or retry blindly. After a partial update or uncertain mailbox completion, the installer deliberately blocks CPU exit. Do not reset or remove power while programming may still be active; diagnose the recorded state before choosing a recovery action.
 
-Preserve the generated JSON report. Do not retry blindly, bypass preflight, or flash the whole `.bin`: it contains default bytes in the saved-settings range. After partial programming or uncertain mailbox completion, the installer intentionally blocks CPU exit; do not reset or power-cycle while a flash request may still be active. Diagnose the recorded state before deciding on recovery. No automated rollback or full-chip recovery is supplied.
+Do not flash the entire `.bin` over the controller: it contains default bytes in the live settings range. The bundled stock dump is a reference program image, not a verified full-chip recovery backup. No automatic rollback or full-chip recovery tool is supplied.
+
+Implementation details and porting guidance are in [DEVELOPMENT.md](DEVELOPMENT.md). The supported command list is in [tools/README.md](tools/README.md).

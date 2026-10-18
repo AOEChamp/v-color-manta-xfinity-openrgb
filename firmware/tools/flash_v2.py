@@ -1,13 +1,16 @@
 """Discover RGB DIMMs and install exact final firmware on the user's selection."""
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent / '_internal'))
 import argparse
 import datetime
 import json
-import second_dimm_e000_v2 as stock
-import probe_bootloader_mailbox as boot
-from build_e000_v2_firmware import ROOT
-from snapshot_retry import module
+import final_installer as stock
+import bootloader as boot
+from firmware_image import ROOT
+import transport as module
 from list_dimms import discover, choose, ADDRESSES
-from probe_firmware_read import snapshot
+from identity import snapshot
 
 
 class TargetBus:
@@ -50,13 +53,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true', required=True)
     parser.parse_args()
-    physical = module.PawnBus()
     report = {}
-    path = ROOT / ('v2-install-' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + '.json')
+    reports = ROOT.parent / 'reports'
+    reports.mkdir(exist_ok=True)
+    path = reports / ('v2-install-' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ') + '.json')
     bus = None
+    physical = None
     def save():
         path.write_text(json.dumps(bus.report(report) if bus else report, indent=2), encoding='utf-8')
     try:
+        physical = module.PawnBus()
         with physical.transaction():
             rows = discover(physical)
         target = choose(rows)  # Prompt without holding the shared SMBus mutex.
@@ -66,6 +72,8 @@ def main():
         if others:
             report['control'] = '0x73'
         save()
+        print(f'Flashing selected RGB controller {target:#04x}. Keep power stable.')
+        print(f'Report: {path}')
         with physical.transaction():
             # Rediscover after the prompt, before any bootloader/reset operation.
             if discover(physical) != rows:
@@ -76,14 +84,20 @@ def main():
             save()
             if not report['all_other_modules_unchanged']:
                 raise RuntimeError('Another module changed; inspect report')
+        print('Firmware installed and verified. Application resumed; saved settings preserved.')
     except BaseException as exc:
         report['error'] = str(exc)
         save()
         raise
     finally:
-        physical.close()
-        print(path)
+        if physical:
+            physical.close()
+        print(f'Report: {path}')
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except (OSError, RuntimeError, ValueError, EOFError, KeyboardInterrupt) as exc:
+        print(f'Flash stopped: {exc}', file=sys.stderr)
+        raise SystemExit(1)

@@ -1,11 +1,10 @@
 """Offline discovery/selection and selected-address flashing regression tests."""
-from contextlib import nullcontext
 from unittest.mock import patch
 import list_dimms as discovery
 import flash_v2 as flash
-import test_e000_installer as fixtures
-import second_dimm_e000_v2 as stock
-import probe_bootloader_mailbox as boot
+import test_installer as fixtures
+import final_installer as stock
+import bootloader as boot
 
 
 class Physical:
@@ -75,5 +74,3 @@ def run():
     print('Discovery/selection and 40 target/control/fault cases passed; no hardware access.')
 
 
-if __name__ == '__main__':
-    run()

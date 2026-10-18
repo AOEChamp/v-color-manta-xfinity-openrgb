@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import struct
 
-ROOT = Path(__file__).resolve().parents[1] / 'images'
+ROOT = Path(__file__).resolve().parents[2] / 'images'
 SOURCE = ROOT / 'vcolor-7730-0x71-20261017T135335444329Z-pass1.bin'
 SHA256 = 'beaa0db9a2cee7c0ad0af668fd3860b3a1b4d327f7150941d39d0f3db40c278a'
 OUTPUT = ROOT / 'vcolor-7730-e000-candidate.bin'
@@ -60,8 +60,3 @@ def build(original):
     return bytes(image), report
 
 
-if __name__ == '__main__':
-    image, report = build(SOURCE.read_bytes())
-    OUTPUT.write_bytes(image)
-    OUTPUT.with_suffix('.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
-    print(json.dumps(report, indent=2))

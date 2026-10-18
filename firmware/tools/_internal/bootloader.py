@@ -1,25 +1,14 @@
-"""One bootloader-entry / read-only mailbox / exit experiment on DIMM 0x71.
-
-No host flash-controller command, erase, program, unlock or SPD writes.
-Entry/exit sequences are actual updater transactions recovered by emulation.
-"""
-import argparse
-import datetime
-import json
-from pathlib import Path
+"""CPU stop/run bootloader session with guarded application exit."""
 import time
-from snapshot_retry import module
-from probe_firmware_read import snapshot
+from identity import snapshot
 
-ENTRY = ((0x201, 0xe0), (0x600, 0x48), (0x606, 0xe1), (0x605, 0xe0),
-         (0x604, 0), (0x603, 0x0c), (0x602, 0), (0x601, 3), (0x600, 3))
-EXIT = ((0x201, 0), (0x606, 0), (0x605, 1), (0x604, 1),
-        (0x603, 0x0a), (0x601, 3), (0x600, 3))
 REQUEST = bytes((0, 0, 0, 0, 0, 0, 16, 0x30, 0))
 EXPECTED = bytes.fromhex('001a0020d5000000dd000000df000000')
 
 
-def run(bus, report, save, cpu_only=False, verified_action=None, control=True):
+def run(bus, report, save, cpu_only=True, verified_action=None, control=True):
+    if not cpu_only:
+        raise ValueError('Only CPU stop/run bootloader entry is supported')
     addresses = (0x71, 0x73) if control else (0x71,)
     report['before'] = [snapshot(bus, a) for a in addresses]
     report['before_watchdog'] = bus.read(0x71, 0x600, 7).hex()
@@ -27,9 +16,9 @@ def run(bus, report, save, cpu_only=False, verified_action=None, control=True):
         raise RuntimeError('Expected application mode and running controller; no writes sent')
     original_stop = bus.read(0x71, 0x202, 1)[0]
     original_flags = bus.read(0x71, 0x606, 1)[0]
-    entry = ((0x202, original_stop | 1), (0x606, original_flags | 0xe1), (0x202, original_stop)) if cpu_only else ENTRY
-    exit_sequence = ((0x202, original_stop | 1), (0x606, original_flags), (0x202, original_stop)) if cpu_only else EXIT
-    report['reset_method'] = 'CPU-only 0202; no watchdog writes' if cpu_only else 'vendor watchdog'
+    entry = ((0x202, original_stop | 1), (0x606, original_flags | 0xe1), (0x202, original_stop))
+    exit_sequence = ((0x202, original_stop | 1), (0x606, original_flags), (0x202, original_stop))
+    report['reset_method'] = 'CPU-only 0202'
 
     def write(reg, value, phase):
         if phase in ('entry', 'exit'):
@@ -139,36 +128,3 @@ def run(bus, report, save, cpu_only=False, verified_action=None, control=True):
             raise RuntimeError('Control module changed after exit')
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--execute', action='store_true', required=True)
-    parser.add_argument('--cpu-only', action='store_true', help='Use 0202 stop/run and boot flags; no watchdog writes')
-    args = parser.parse_args()
-    now = datetime.datetime.now(datetime.timezone.utc)
-    path = Path(__file__).resolve().parents[1] / 'images' / (
-        'bootloader-mailbox-read-' + now.strftime('%Y%m%dT%H%M%S%fZ') + '.json')
-    report = dict(utc=now.isoformat(), target='0x71', control='0x73',
-                  erase_program_unlock_commands=False, entry_attempts=0, exit_attempts=0, status='starting')
-
-    def save():
-        path.write_text(json.dumps(report, indent=2), encoding='utf-8')
-
-    bus = None
-    try:
-        save()
-        bus = module.PawnBus()
-        with bus.transaction():
-            run(bus, report, save, args.cpu_only)
-    except BaseException as exc:
-        report['error'] = str(exc)
-        save()
-        raise
-    finally:
-        if bus:
-            bus.close()
-        print(path)
-        print(json.dumps(report, indent=2))
-
-
-if __name__ == '__main__':
-    main()
