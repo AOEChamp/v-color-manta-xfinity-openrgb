@@ -7,7 +7,7 @@ There are two parts to that goal:
 - **OpenRGB control:** let OpenRGB set the RAM's lighting and send an explicit save command.
 - **Persistent colors:** repair the controller's save and startup-restore routines so it can restore the saved lighting when it starts, without waiting for RGB software to reapply it.
 
-This repository currently includes the **E000 v2 firmware patch**, reproducible build tools, offline tests, and a Windows flashing tool. The complete OpenRGB controller/bridge release is not yet packaged here. Flashing the firmware fixes persistence; it does not by itself add a device to OpenRGB.
+This repository includes the **E000 v2 firmware patch**, reproducible build tools, offline tests, a Windows flashing tool, and a Windows OpenRGB bridge. The bridge provides lighting control and Save to Device; persistent colors require the firmware patch. Flashing the firmware fixes persistence; it does not by itself add a device to OpenRGB.
 
 ## What the firmware fixes
 
@@ -25,6 +25,18 @@ Embedded firmware name strings:
 
 - Application: `6K7732-20260814-QFN32-OLED`
 - Bootloader: `6K7732BT20200731`
+
+## Install the OpenRGB bridge
+
+The bridge supports Windows x64, AMD PIIX4 SMBus, and eight LEDs per DIMM; port 0 is the hardware-tested configuration. Intel SMBus and Linux are not implemented.
+
+1. Install OpenRGB with its PawnIO driver. Run OpenRGB once, then close it completely, including its tray icon. Close other RAM lighting applications.
+2. Keep the complete `bin` folder together and run **[bin/Install.cmd](bin/Install.cmd)**. Accept elevation using the same Windows account you use for OpenRGB.
+3. Wait for **Installed and running**, then open OpenRGB normally and accept its administrator prompt. The bridge devices connect through the saved SDK connection.
+
+The installer copies the bridge to `%LOCALAPPDATA%\Programs\VColorOpenRGBBridge` and starts it silently at sign-in. No separate Python installation is needed for the bridge. Apply your lighting and use **Save to Device** on each DIMM to persist it with E000 v2 firmware; ordinary Apply does not save.
+
+See [bridge setup, configuration and removal](bin/README.txt) for portable OpenRGB paths, custom settings files, logs, and uninstalling. See [bridge development](src/README.md) for source and build instructions. The bridge does not flash firmware; use the separate instructions below.
 
 ## Quick flashing
 

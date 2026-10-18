@@ -58,7 +58,7 @@ After verifying the result, rerun the launcher and select a different supported 
 
 ## Save lighting and check persistence
 
-Flashing preserves the existing saved-settings block and does not apply or save a new color. Apply your desired lighting through compatible software and explicitly use its save function for this custom firmware. Ordinary OpenRGB Apply is not a save. A complete OpenRGB Save integration is not yet packaged in this repository.
+Flashing preserves the existing saved-settings block and does not apply or save a new color. Apply your desired lighting through compatible software and explicitly use its save function for this custom firmware. Ordinary OpenRGB Apply is not a save. The [OpenRGB bridge](../bin/README.txt) now provides Save to Device for this firmware.
 
 To test persistence, prevent RGB software from applying settings automatically, shut down and start the computer, and observe the LEDs before software applies anything. Record whether AC power was removed. A controller CPU restart alone does not establish power-loss persistence. Do not reapply a color before observing startup restoration.
 

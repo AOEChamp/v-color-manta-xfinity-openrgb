@@ -6,3 +6,9 @@ firmware/images/*runtime-save-*.json
 firmware/images/config-*.bin
 firmware/images/acquisition-*.json
 firmware/reports/
+
+/build/
+**/logs/
+**/bridge-config.json
+**/install-state.json
+!/bin/_internal/*.pyd
