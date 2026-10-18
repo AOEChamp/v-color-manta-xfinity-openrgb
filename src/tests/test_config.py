@@ -73,5 +73,21 @@ class ConfigTests(unittest.TestCase):
             with bus.transaction(): self.fail('must not access hardware')
         bus.kernel.ReleaseMutex.assert_called_once_with(123)
 
+    def test_service_owned_mutex_opens_with_only_required_access(self):
+        dll, kernel = Mock(), Mock()
+        dll.pawnio_open.return_value = dll.pawnio_load.return_value = 0
+        kernel.CreateMutexW.return_value = 0  # Existing SYSTEM mutex denies full access.
+        kernel.CreateMutexExW.return_value = 123
+        kernel.WaitForSingleObject.return_value = 0
+        with patch('ene_aura6.c.WinDLL', side_effect=[dll,kernel], create=True), \
+             patch.object(Path, 'read_bytes', return_value=b'module'), \
+             patch.object(PawnBus, 'execute', return_value=[0]):
+            bus = PawnBus(self.root)
+            bus.close()
+        kernel.CreateMutexW.assert_not_called()
+        kernel.CreateMutexExW.assert_called_once_with(None, r'Global\Access_SMBUS.HTP.Method', 0, 0x00100001)
+        kernel.ReleaseMutex.assert_called_once_with(123)
+        kernel.CloseHandle.assert_called_once_with(123)
+
 
 if __name__ == '__main__': unittest.main()

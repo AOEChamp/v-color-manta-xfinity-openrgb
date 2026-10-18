@@ -7,7 +7,7 @@ from pathlib import Path
 import shutil
 import sys
 
-VERSION = '0.4.0'
+VERSION = '0.4.1'
 DEFAULTS = {
     'openrgb_dir': None,
     'port': 6743,
