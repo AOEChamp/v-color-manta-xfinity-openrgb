@@ -52,7 +52,9 @@ class TargetBus:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true', required=True)
-    parser.parse_args()
+    parser.add_argument('--openrgb-dir', type=Path, default=Path(r'C:\Program Files\OpenRGB'),
+                        help='OpenRGB directory containing PawnIOLib.dll and SmbusPIIX4.bin')
+    args = parser.parse_args()
     report = {}
     reports = ROOT.parent / 'reports'
     reports.mkdir(exist_ok=True)
@@ -62,7 +64,7 @@ def main():
     def save():
         path.write_text(json.dumps(bus.report(report) if bus else report, indent=2), encoding='utf-8')
     try:
-        physical = module.PawnBus()
+        physical = module.PawnBus(directory=args.openrgb_dir)
         with physical.transaction():
             rows = discover(physical)
         target = choose(rows)  # Prompt without holding the shared SMBus mutex.

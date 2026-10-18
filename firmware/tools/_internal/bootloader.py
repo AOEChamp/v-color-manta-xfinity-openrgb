@@ -116,10 +116,8 @@ def run(bus, report, save, cpu_only=True, verified_action=None, control=True):
         report['exit_0606'] = bus.read(0x71, 0x606, 1).hex()
         if report['exit_0606'] != '00':
             raise RuntimeError('Vendor exit did not restore application flags; inspect report')
-        report['after_exit_before_red'] = snapshot(bus, 0x71)
         report['after'] = [snapshot(bus, a) for a in addresses]
         report['lighting_unchanged'] = report['before'] == report['after']
-        report['lighting_reapplication_disabled_by_user'] = True
         report['control_unchanged'] = report['before'][1:] == report['after'][1:]
         report['control_present'] = control
         report['application_resumed'] = True

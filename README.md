@@ -11,7 +11,7 @@ Embedded firmware name strings:
 
 ## Quick flashing
 
-Install Python 3.12 and OpenRGB with its PawnIO driver at `C:\Program Files\OpenRGB`. Close all RGB/SMBus applications, open **PowerShell as Administrator**, and change to this repository's directory.
+Install Python 3.12 and OpenRGB with its PawnIO driver. The default OpenRGB folder is `C:\Program Files\OpenRGB`; pass `-OpenRGBDir` to the launcher for another location. Close all RGB/SMBus applications, open **PowerShell as Administrator**, and change to this repository's directory.
 
 ```powershell
 # List DIMMs, select a controller, and flash it:

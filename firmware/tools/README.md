@@ -11,6 +11,8 @@ Run these commands from the repository root. Hardware tools require Windows, adm
 
 Use `-Python 'C:\Path\To\python.exe'` with the PowerShell launcher when Python is not on PATH. `flash_v2.py` supports `--help`; direct flashing through Python requires `--execute`, and the PowerShell launcher is recommended because it also checks administrator access and common conflicting processes.
 
+Use `-OpenRGBDir 'D:\Apps\OpenRGB'` for a portable or custom OpenRGB folder. Direct Python calls accept `--openrgb-dir 'D:\Apps\OpenRGB'`. The default is `C:\Program Files\OpenRGB`.
+
 Flashing, including discovery and selection, uses only Python's standard library. Offline validation needs Unicorn; disassembly needs Capstone. Install both with:
 
 ```powershell
