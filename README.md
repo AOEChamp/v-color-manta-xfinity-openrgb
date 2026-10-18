@@ -1,46 +1,58 @@
-# V-COLOR Manta XFinity OpenRGB support and persistent colors
+# V-Color Manta XFinity for OpenRGB
 
-This project brings OpenRGB support to V-COLOR Manta XFinity RAM and fixes the RGB-controller firmware so the RAM can remember a saved color across shutdowns and restarts.
+A Windows bridge that adds compatible V-Color Manta XFinity DDR5 lighting to OpenRGB. Supports eight LEDs per DIMM, Static, Direct and Off modes, individual LED colors, and Save to Device with patched E000 v2 firmware.
 
-There are two parts to that goal:
+## Install
 
-- **OpenRGB control:** let OpenRGB set the RAM's lighting and send an explicit save command.
-- **Persistent colors:** repair the controller's save and startup-restore routines so it can restore the saved lighting when it starts, without waiting for RGB software to reapply it.
+1. Install Windows x64 OpenRGB with its PawnIO driver. Run OpenRGB once, then close it completely, including its tray icon. Close other applications controlling the RAM.
+2. Download or clone this repository. Keep the complete `bin` folder together and run **[bin/Install.cmd](bin/Install.cmd)**. Accept elevation using the same Windows account you use for OpenRGB.
+3. Wait for **Installed and running**, then open OpenRGB normally and accept its administrator prompt. The RAM devices connect automatically; no SDK or firmware configuration is required.
 
-This repository currently includes the **E000 v2 firmware patch**, reproducible build tools, offline tests, and a Windows flashing tool. The complete OpenRGB controller/bridge release is not yet packaged here. Flashing the firmware fixes persistence; it does not by itself add a device to OpenRGB.
+The installer copies the application to **`%LOCALAPPDATA%\Programs\VColorOpenRGBBridge`**. It replaces an older bridge startup task, saves OpenRGB's localhost SDK connection with a settings backup, and verifies the new bridge is listening before reporting success. It also configures OpenRGB to request administrator rights for native hardware detection. The bridge starts silently at sign-in; OpenRGB keeps its normal hardware detection.
 
-## What the firmware fixes
+After successful installation, you can move or remove the downloaded repository. The installed application does not depend on that folder. No Python installation is needed. The bridge does not stop, pause or restart other RGB applications or services.
 
-The supported stock firmware writes saved lighting settings to nonexistent addresses. Nothing is stored, so saved colors do not persist across shutdowns and restarts at all. The startup restore routine also uses the wrong byte layout for saved LED counts.
+## Configuration and troubleshooting
 
-E000 v2 redirects saving and restoring to the same writable settings block and fixes restoration of the channel and LED counts. It preserves the existing settings format and color arrays. After compatible software explicitly saves your lighting, the controller can restore it at startup. Ordinary Apply only changes the current lighting; it does not save it to flash. See the [flashing and persistence guide](firmware/FLASHING.md) for installation and verification.
+OpenRGB's folder must contain `OpenRGB.exe`, `PawnIOLib.dll` and `SmbusPIIX4.bin`. The bridge discovers portable installations beside itself, standard Program Files installations and OpenRGB on PATH. If discovery fails, copy `bin/bridge-config.example.json` to `bin/bridge-config.json`, set `openrgb_dir`, and rerun Install. Existing installed configuration is preserved during upgrades; edit it in the installed application folder when updating settings.
 
-## Supported hardware
-
-The supplied firmware and flashing tools target V-COLOR Manta XFinity RAM, model **TMXFL1660830WWK**, with ENE chip-ID bytes `77 30` and firmware signature `A8 32 16 E8 8C`. They support only the exact stock firmware image documented in the [development guide](firmware/DEVELOPMENT.md); a matching product name or controller identity alone is not enough.
-
-ARGB controller: **ENE 6K7732**, identified by the embedded firmware labels (physical package marking has not been inspected). Chip-ID bytes: `77 30`.
-
-Embedded firmware name strings:
-
-- Application: `6K7732-20260814-QFN32-OLED`
-- Bootloader: `6K7732BT20200731`
-
-## Quick flashing
-
-Install Python 3.12 and OpenRGB with its PawnIO driver. The default OpenRGB folder is `C:\Program Files\OpenRGB`; pass `-OpenRGBDir` to the launcher for another location. Close all RGB/SMBus applications, open **PowerShell as Administrator**, and change to this repository's directory.
+The optional settings are `openrgb_dir` (null for discovery), `port` (default 6743) and `smbus_port` (default 0). If another SDK server uses 6743, select a free port before installation. For OpenRGB launched with a custom configuration directory, use:
 
 ```powershell
-# List DIMMs, select a controller, and flash it:
-.\firmware\Flash-V2.ps1
+.\bin\Install.cmd -SettingsPath "<full path to OpenRGB.json>"
 ```
 
-The selector shows the RGB controller's hardware identity and SMBus address. Windows DIMM slot/manufacturer/part names are also listed; Windows does not reliably map those slots to RGB addresses, so the tool does not guess that association. Discovery checks only RGB addresses `0x70..0x73` on PIIX4 port 0. A matching identity is not proof of compatible stock firmware; the installer retains its stock-page preflight.
+Setup failures are reported in a dialog and `logs/setup-error.log` in the application or download folder. Runtime logs are in the installed application's `logs` folder. OpenRGB settings backups are saved beside `OpenRGB.json`. `Start.cmd` and `Stop.cmd` in the installed folder provide manual control. Closing OpenRGB alone leaves the bridge running.
 
-Flash one selected module per run, then check the generated report before repeating for another module. Keep power stable. Reports are saved in `firmware/reports/`. See the full flashing guide below for prerequisites, verification, and failure handling.
+To uninstall, close OpenRGB and run **Uninstall.cmd** from the installed application folder. It stops the bridge, removes its startup task and saved SDK connection, and restores the previous OpenRGB elevation setting if it has not otherwise changed. The stopped application folder and logs can then be deleted.
 
-- [Firmware development, changes, validation, and porting](firmware/DEVELOPMENT.md)
-- [Flashing and persistence testing](firmware/FLASHING.md)
-- [Supported tools and developer commands](firmware/tools/README.md)
+## Compatibility and persistence
 
-This is an independent interoperability project, with no manufacturer endorsement. See [third-party notices](THIRD_PARTY_NOTICES.md).
+Requires **Windows x64 and AMD PIIX4 SMBus**. The supported RAM is **TMXFL1660830WWK**, with firmware signature `A8 32 16 E8 8C` and eight LEDs per DIMM. Matching lighting controllers are discovered at addresses `0x70` through `0x73`. Other models and firmware revisions are not assumed compatible. Intel SMBus and Linux are not implemented; PIIX4 port 0 is the hardware-tested configuration.
+
+**Save to Device assumes patched E000 v2 firmware on every matched DIMM.** Apply your lighting, then save each desired DIMM. Ordinary Apply does not persist lighting. Direct saves a snapshot; Off saves black. The bridge does not verify or flash firmware, and the original firmware does not provide the repaired persistence behavior.
+
+The [firmware documentation](src/firmware/DEVELOPMENT.md) and [flashing instructions](src/firmware/FLASHING.md) are under `src`. Firmware tools are separate from the bridge installer.
+
+## Repository layout
+
+| Path | Contents |
+| --- | --- |
+| `bin/` | Installer, runnable bridge, required runtime, configuration example and notices |
+| `src/bridge/` | Python bridge and OpenRGB settings helper |
+| `src/windows/` | Installer and launcher source |
+| `src/tests/` | Offline bridge, settings, packaging and installer tests |
+| `src/tools/` | Build and folder preparation scripts |
+| `src/firmware/` | Firmware source tools, required reference images, tests and research |
+| `src/docs/` | Register and SDK protocol documentation |
+
+To build, install Python 3.12 x64 and run:
+
+```powershell
+python -m pip install -r src/requirements-dev.txt
+.\src\tools\build_release.ps1
+```
+
+The build runs offline tests and updates `bin`; it creates no release archive and does not install anything or access RAM. Build intermediates and local settings are ignored by Git. See [src/README.md](src/README.md) for development commands.
+
+GPL-2.0-or-later. See [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md). Independent interoperability project, with no manufacturer endorsement.
