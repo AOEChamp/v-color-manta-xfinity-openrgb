@@ -8,13 +8,37 @@ The 65,536-byte program-flash dump was acquired twice with identical contents. O
 
 `images/vcolor-7730-e000-v2.bin` SHA-256: `0263291e72b23c074d9048ecb626b915ffe5e48c8a53264a82ef8530627b7df3`. Its adjacent JSON is the deterministic build manifest. Its historical offline status describes the build stage; current hardware results are below. The stock dump and captured settings test fixture are included for reproduction.
 
+## Controller flash specifications and memory map
+
+The supported controller has **64 KiB (65,536 bytes) of program flash**, at `0x0000..0xFFFF`, with **128-byte pages**. The vendor library's chip table assigns this capacity and page size to chip ID `77 30`; two identical full-range captures and the boundary probes described below corroborate the program-flash map. These specifications apply to the exact controller/image identified above, not every ENE controller or V-COLOR kit.
+
+All ranges below are inclusive program-flash offsets, not DDR SPD or live SMBus register addresses.
+
+| Range | Size | Contents or purpose |
+| --- | --- | --- |
+| `0x0000..0x17FF` | 6,144 bytes | Bootloader region; unchanged by the patch |
+| `0x1800..0xB747` | 40,776 bytes | Application checksum span, including the header below; the checksum calculation excludes the 16-byte header |
+| `0x2000..0x200F` | 16 bytes | Application header, including firmware length and checksums; part of the application region above |
+| `0xB748..0xFFFF` | 18,616 bytes | Entirely zero-filled in the verified stock image; the last nonzero byte is at `0xB747` |
+| `0xE000..0xE17F` | 384 bytes | Patched saved-settings block inside that blank tail: three aligned pages at `0xE000`, `0xE080`, and `0xE100` |
+
+The blank tail contains `00`, not the erased-flash value `FF`. Blank image contents alone do not establish that every location is writable or safe to repurpose. `0xE000` was selected inside the 64 KiB program range and outside application checksum coverage, then tested with the controller's internal bootloader writer: a marker changed `00 -> 01`, read back correctly, and was restored to `00`, with the rest of the page and checked neighbors unchanged. Later application-mode saves verified the complete relocated settings block. The patch uses only those three settings pages; it does not claim the entire blank tail as general-purpose storage.
+
+### Why the original settings addresses do not work
+
+The stock save routine writes three pages at `0x1F800`, `0x1F880`, and `0x1F900`; startup validation/restore reads `0x1F600..0x1F77F`. These are different locations and are all outside the controller's 64 KiB program-flash range. The original save therefore does not store persistent colors. These upper addresses must not be confused with the distinct lower-flash offsets `0xF600` or `0xF800`.
+
+Boundary probes found a sharp transition from `00` at the end of the captured program range to `FF` at `0x10000`. Sampled upper addresses returned `FF`; duplicate peripheral and bootloader reads of the original save/restore blocks were also entirely `FF`. An internal bootloader write at `0x1F800`, using the same writer that worked at `0xE000`, completed its mailbox request but left the page unchanged. Mailbox completion alone is therefore not proof that settings were stored.
+
+The peripheral read interface accepts addresses wider than the backed program-flash range: reads crossing `0x1FFFF..0x20000` wrap to the firmware's first bytes, and an explicit read at `0x20000` matches offset zero. This is an observed **128 KiB read-window alias**, not 128 KiB of usable flash. Likewise, an `FF` response outside the program range is not evidence of writable storage. The 64 KiB program image does not include or establish the size of any separate calibration/trim storage and is not a verified full-chip recovery backup.
+
 ## Investigation and tools
 
 Python scripts accessed the controller through OpenRGB's PawnIO transport, using the signed PIIX4 SMBus module on port 0 and a shared Windows SMBus mutex. Vendor HALs and public ENE updater code were examined offline for interoperability. Capstone supplied ARM Thumb disassembly; Unicorn executed actual ARM code with simulated flash/MMIO. PE inspection, native disassembly and ILSpy inspection of managed vendor libraries helped identify flash geometry and stop/run behavior. Vendor applications and DLLs were not executed to perform the patch.
 
 The validated dump path enables bit 0 of register `0410`, selects the flash address at `0411..0413`, issues program READ `13` at `0415`, polls busy bit `80` at `0410`, and reads `0414`. The address auto-increments. Control/address registers are saved and restored. `tools/_internal/dump_rgb_firmware.py` preserves the acquisition routine used to make two matching 64 KiB captures; it is specific to this identity, addresses and controller geometry.
 
-Disassembly identified dispatcher `4138`, serializer `6AB0`, startup `420C`, restore `6E0C`, validator `6E90`, and internal page writer `3624`. Command `AA` at live register `E0A0` invokes save. The original save destination was `1F800`, while startup validation read `1F600`. Upper-region reads returned FF and attempted writes did not change data. This does not prove that all upper storage is absent. A bounded lower-flash experiment established that the internal bootloader writer works at `E000`.
+Disassembly identified dispatcher `4138`, serializer `6AB0`, startup `420C`, restore `6E0C`, validator `6E90`, and internal page writer `3624`. Command `AA` at live register `E0A0` invokes save. The memory map and hardware probes above explain why the stock upper-address destinations were replaced with the validated lower-flash block at `E000`.
 
 ## Final firmware changes
 
