@@ -1,0 +1,751 @@
+{
+  "version": "patched v1",
+  "source_sha256": "d1d3188234476d240aa877bf064e8a44a347d4206d4f1a1aa52b6da61f29bad8",
+  "clear_sha256": "ba0d0ca1f33579096378aa62009b15f3f35737f92659c717dbc67042070498b1",
+  "encoded_sha256": "8065eda52ff8aa43bd9b1d7316f458b9c9cad7904d516491d3443c35a6a1c610",
+  "size": 839360,
+  "parser": 3205174064,
+  "worker": 3205174336,
+  "code_size": 1424,
+  "code_end": 3205175488,
+  "calls": {
+    "3205174352": {
+      "target": 3217175668,
+      "name": "irq_lock"
+    },
+    "3205174408": {
+      "target": 3217175688,
+      "name": "irq_unlock"
+    },
+    "3205174448": {
+      "target": 3205175252,
+      "name": "read_reply"
+    },
+    "3205174484": {
+      "target": 3205174860,
+      "name": "persist_save"
+    },
+    "3205174516": {
+      "target": 3204771076,
+      "name": "rgb_init"
+    },
+    "3205174656": {
+      "target": 3204770884,
+      "name": "pwm"
+    },
+    "3205174824": {
+      "target": 3204770884,
+      "name": "pwm"
+    },
+    "3205174836": {
+      "target": 3204752568,
+      "name": "native_timer"
+    },
+    "3205174932": {
+      "target": 3204746080,
+      "name": "property_get"
+    },
+    "3205175020": {
+      "target": 3204746092,
+      "name": "property_set"
+    },
+    "3205175044": {
+      "target": 3204746224,
+      "name": "property_flush"
+    },
+    "3205175076": {
+      "target": 3204771076,
+      "name": "rgb_init"
+    },
+    "3205175112": {
+      "target": 3204746080,
+      "name": "property_get"
+    },
+    "3205175188": {
+      "target": 3217175668,
+      "name": "irq_lock"
+    },
+    "3205175228": {
+      "target": 3217175688,
+      "name": "irq_unlock"
+    },
+    "3205175448": {
+      "target": 3204746080,
+      "name": "property_get"
+    },
+    "3205175464": {
+      "target": 3204686916,
+      "name": "report_send"
+    }
+  },
+  "delegates": {
+    "3205174304": 3204687053
+  },
+  "changes": [
+    {
+      "offset": 235956,
+      "length": 4,
+      "before": "30130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 235960,
+      "length": 4,
+      "before": "44130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 235972,
+      "length": 4,
+      "before": "24140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 235976,
+      "length": 4,
+      "before": "5c130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 235980,
+      "length": 4,
+      "before": "40140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 235984,
+      "length": 4,
+      "before": "78130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236124,
+      "length": 4,
+      "before": "14140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236128,
+      "length": 4,
+      "before": "98130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236132,
+      "length": 4,
+      "before": "cc130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236252,
+      "length": 4,
+      "before": "24150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236256,
+      "length": 4,
+      "before": "54140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236260,
+      "length": 4,
+      "before": "6c140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236456,
+      "length": 4,
+      "before": "0c150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236460,
+      "length": 4,
+      "before": "7c140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236472,
+      "length": 4,
+      "before": "a0140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236520,
+      "length": 4,
+      "before": "b8140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236572,
+      "length": 4,
+      "before": "b8140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236620,
+      "length": 4,
+      "before": "b8140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236676,
+      "length": 4,
+      "before": "b8140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236740,
+      "length": 4,
+      "before": "b8140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236800,
+      "length": 4,
+      "before": "f0140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236804,
+      "length": 4,
+      "before": "cc140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236896,
+      "length": 4,
+      "before": "3c160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236900,
+      "length": 4,
+      "before": "54140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 236904,
+      "length": 4,
+      "before": "6c140bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237136,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237140,
+      "length": 4,
+      "before": "4c150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237148,
+      "length": 4,
+      "before": "24160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237152,
+      "length": 4,
+      "before": "58150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237156,
+      "length": 4,
+      "before": "8c150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237204,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237264,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237312,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237360,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237420,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237484,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237488,
+      "length": 4,
+      "before": "ac150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237556,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237560,
+      "length": 4,
+      "before": "ac150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237644,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237648,
+      "length": 4,
+      "before": "ac150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237656,
+      "length": 4,
+      "before": "04160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237660,
+      "length": 4,
+      "before": "c0150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237780,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237784,
+      "length": 4,
+      "before": "ac150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237792,
+      "length": 4,
+      "before": "dc150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237796,
+      "length": 4,
+      "before": "c0150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237864,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237868,
+      "length": 4,
+      "before": "ac150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237920,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 237972,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238028,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238100,
+      "length": 4,
+      "before": "38150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238104,
+      "length": 4,
+      "before": "ac150bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238208,
+      "length": 4,
+      "before": "a0160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238212,
+      "length": 4,
+      "before": "50160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238216,
+      "length": 4,
+      "before": "84160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238300,
+      "length": 4,
+      "before": "b0160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238436,
+      "length": 4,
+      "before": "c8160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238440,
+      "length": 4,
+      "before": "e0160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238460,
+      "length": 4,
+      "before": "f0160bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238564,
+      "length": 4,
+      "before": "70170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238568,
+      "length": 4,
+      "before": "04170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238576,
+      "length": 4,
+      "before": "28170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238648,
+      "length": 4,
+      "before": "60170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238652,
+      "length": 4,
+      "before": "48170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238908,
+      "length": 4,
+      "before": "8c180bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238912,
+      "length": 4,
+      "before": "80170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238916,
+      "length": 4,
+      "before": "9c170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238920,
+      "length": 4,
+      "before": "b8170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238928,
+      "length": 4,
+      "before": "d4170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238972,
+      "length": 4,
+      "before": "a0180bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 238976,
+      "length": 4,
+      "before": "f0170bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 239072,
+      "length": 4,
+      "before": "b8180bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 239076,
+      "length": 4,
+      "before": "3c180bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 239080,
+      "length": 4,
+      "before": "18180bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 239124,
+      "length": 4,
+      "before": "78180bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 239128,
+      "length": 4,
+      "before": "60180bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 507680,
+      "length": 4,
+      "before": "44130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 509424,
+      "length": 4,
+      "before": "44130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 511012,
+      "length": 4,
+      "before": "44130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 511160,
+      "length": 4,
+      "before": "44130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 511280,
+      "length": 4,
+      "before": "44130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 513480,
+      "length": 4,
+      "before": "44130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 514288,
+      "length": 4,
+      "before": "44130bbf",
+      "after": "240000bf",
+      "purpose": "retired diagnostic text -> empty string"
+    },
+    {
+      "offset": 725808,
+      "length": 1440,
+      "before": "73656e64206d657373616720696e20697372000021285f6b65726e656c2e6e657374656420213d203029000025733a206275666665722025642069732062757379200a0a0000000025733a206d73675f636f6e74656e74206973204e554c4c202e2e2e200a00000025733a20736f6d65206d65737361676520646174612064726f7070656420647572696e67207472616e7366657221200a200a000025733a2073656e64657220747269656420746f2073656e642025642062797465736f6e6c7920726563656976656420257a75206279746573207265636569766572202570200a0a006f735f726563656976655f6d736700006d73675f706f6f6c5f6765745f667265655f6d73675f696e666f00006f735f73656e645f6173796e635f6d736700000025733a20646576696365206e6f7420666f756e640a0a000025733a2073756363657373200a0a000025733a204932535f534c4156455f4d4f44452031313232323232323232320a0a0000000025733a206e6f7420737570706f72743a2025640a00000000617564696f5f696e2d3e61696e5f64657600000025733a206e6f7420737570706f7274206368616e6e656c20747970653a2025640a00000068616c5f61696e5f7365745f636f6e74726c5f63616c6c6261636b0068616c5f61696e5f6368616e6e656c5f6f70656e0000000068616c5f617564696f5f696e5f696e6974000000617564696f5f6f75742d3e616f75745f64657600696e69745f706172616d000025733a2073616d706c6520726174652025642c206368616e6e656c20747970652025642c206f7574206669666f2025640a00000025733a20696e76616c6964206368616e6e656c20747970652025640a00000000616f75745f6368616e6e656c5f68616e646c650025733a20476574204649464f20636f756e746572206572726f720a0068616c5f616f75745f6368616e6e656c5f6765745f72656d61696e5f70636d5f73616d706c65730068616c5f616f75745f6368616e6e656c5f6765745f73616d706c655f636e740068616c5f616f75745f6368616e6e656c5f6f70656e00000068616c5f617564696f5f6f75745f696e6974000025733a20616463206b657920696e206d656d5f6d616c6c6f63206661696c656420206e65656420256420206279746573200a000063616e6e6f7420666f756e64206b6579206465762025730a000000006b65795f6465766963655f6f70656e0063616e6e6f7420666f756e642073747562206465760a00007374756220646f206e6f74206f70656e20796574210a00007374756220636c6f7365210a000000007761746368646f67206f766572666c6f7700000025733a2063616e6e6f7420666f756e64207761746368646f67206465766963650a00000025733a20656e61626c65207761746368646f6720282564206d73290a0000000025733a2064697361626c65207761746368646f670a0000007761746368646f675f73746f700000007761746368646f675f7374617274000025733a2074656d705f646174615b305d3a203078253034780a0a000025733a2074656d705f646174615b315d3a203078253034780a0a000025733a2074656d705f646174615b325d3a203078253034780a0a000025733a20675f726563765f7265706f72743a3078253034780a0a000025733a2053656c662d646566696e6564206461746120686173206265656e2073656e740a0000000025733a207573625f6869645f6f75745f6275665b25645d3a203078253032780a0000000025733a20526561642053656c662d646566696e65642064617461206661696c0a0000000025733a2040402044656275672063616c6c6261636b0a00005f7573625f6869645f64656275675f63620000005f7573625f6869645f7365745f7265706f7274005f6869645f696e7465725f696e5f72656164795f636200005f6869645f696e7465725f6f75745f72656164795f636200",
+      "after": "02008894030209243700091500000000060088944000092433000915000000000000a88c30000915000000000000c88c00000a8d4742093c035229352a0049150000000004000a950302092405000c2429004911000000000101092401000c2413004911000000000201092400000d240900491100000000030109241a004915000000000a000d910200a92d1600201100000000c0690d0009000c910400892d110020110000000001008c2525608d0108000a9100540a0007000b91005a0b0025504b0106000b9125504b0100660c0025504c01c2bf083c5c570aad000002240800e0030000000003bf193ccda439370800200300000000c2bf093c5c57298df9ff201500000000e9ff001000000000e0ffbd271c00bfaf1800a4af1400a0af1d8df00f000000001000a2afc2bf083c5c570a8d025e0a007f006b31ffff6b250500692d03002011000000001400aaaf5c5700ad1000a48f228df00f000000001400aa8f3c0040110000000002660a0005000924060089150000000025204001f5c5c20f000000003300001000000000030040050000000005000010000000002520400193c5c20f000000001400aa8f02660a007f008c31020009240400891500000000413bc177000000001400aa8f02660a007f008c31ffff8c25c2bf083c555300a101000924150089110000000003000924020089150000000000000a2485670aa1025a0a0084670ba1025c0a0086670ba17c670aa1025a0a007d670ba1025c0a007e670ba1806700a1ff00092402000b2402008b1500000000fe000924565309a1fe000b2403002b1100000000113bc17700000000c2bf083c56530991fe000b2426002b15000000008067099104002a2580670aa180002b310300601100000000ff000a242348490140480900c251090025482a017c670a91190049011258000001006b2502520b0021586a01025a0b0085670ba17d670a91190049011258000001006b2502520b0021586a01025a0b0084670ba17e670a91190049011258000001006b2502520b0021586a01025a0b0086670ba1113bc177000000001800a48f2e29c177000000001c00bf8f2000bd270800e00300000000c0ffbd273c00bfafff7f083cffff0835244088001400a8af274800011800a9af5033083c524708351000a8af2000a0af2400a0af2800a0af0bbf043cc01884342000a5270c000624d822c177000000000f004004000000001000a88f2000a98f0b000915000000001400a88f2400a98f07000915000000001800a88f2800a98f03000915000000000d000010000000000bbf043cc01884341000a5270c000624db22c1770000000005004004000000000bbf043cc0188434fc22c177000000003c00bf8f4000bd270800e00300000000d0ffbd272c00bfaf413bc177000000001000a0af1400a0af1800a0af0bbf043cc01884341000a5270c000624d822c177000000001c004004000000001000a88f5033093c5247293517000915000000001400aa8f1800a98f27404001120009150000000002460a00ffff08250400092d0d002011000000001d8df00f000000001c00a2afc2bf083c5c57098d03002015000000001400aa8f5c570aad1c00a48f228df00f000000002c00bf8f3000bd270800e00300000000a0ffbd275c00bfaf5400a4af1000a0af1400a0af1800a0af1c00a0af2000a0af2400a0af2800a0af2c00a0af3000a0af3400a0af3800a0af3c00a0af4000a0af4400a0af4800a0af4c00a0af4742083c035208351000a8af0f00083c038208351400a8afc2bf083c565309911700a9a3856709911800a9a3846709911900a9a3866709911a00a9a37c6709911c00a9a37d6709911d00a9a37e6709911e00a9a35400a88fffff09312c00a9a7024408002e00a8a30bbf043cc01884342000a5270c000624d822c177000000001000a4274000052411e9c077000000005c00bf8f6000bd270800e003000000004f50454e5247425f5631000000000000",
+      "purpose": "MIPS32 RGB/persistence code and property key"
+    },
+    {
+      "offset": 101796,
+      "length": 4,
+      "before": "3e18413b",
+      "after": "5e1cc7c5",
+      "purpose": "main boot RGB init -> restore wrapper (MIPS32)"
+    },
+    {
+      "offset": 727260,
+      "length": 4,
+      "before": "cda403bf",
+      "after": "30130bbf",
+      "purpose": "HID SET_REPORT callback (MIPS32)"
+    },
+    {
+      "offset": 305484,
+      "length": 4,
+      "before": "b9a404bf",
+      "after": "40140bbf",
+      "purpose": "application timer callback -> mailbox worker (MIPS32)"
+    },
+    {
+      "offset": 238852,
+      "length": 2,
+      "before": "12b3",
+      "after": "0403",
+      "purpose": "original status word -> spare stack local sp+16, freeing mailbox"
+    }
+  ],
+  "protocol": {
+    "report_id": 3,
+    "transfer": "HID SET_REPORT Output, EP0",
+    "length": 64,
+    "prefix": "03 52 47 42 03 01",
+    "rgb_offsets": [
+      6,
+      7,
+      8
+    ],
+    "mode_offset": 9,
+    "save_flag_offset": 10,
+    "modes": {
+      "static": 0,
+      "cycle": 1,
+      "pulse": 2,
+      "off": 3
+    },
+    "query_opcode": 2,
+    "reply_opcode": 130,
+    "query_transport": "control output request; interrupt input response"
+  },
+  "mailbox": 3217184604,
+  "restore": 3205175068,
+  "save": 3205174860,
+  "query": 3205175252,
+  "property_key": "OPENRGB_V1",
+  "stack_frames": {
+    "worker": 32,
+    "save_helper": 64,
+    "boot_restore": 48,
+    "query_helper": 96
+  },
+  "transport": "atomic latest-mode/color/save mailbox; consumed by existing application timer",
+  "status": "Patched v1 payload; offline instruction, layout and boot checks are run separately"
+}

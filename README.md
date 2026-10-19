@@ -1,65 +1,36 @@
-# V-COLOR Manta XFinity OpenRGB support and persistent colors
+# OpenRGB plugins for V-Color RAM and Creative Pebble Pro
 
-This project brings OpenRGB support to V-COLOR Manta XFinity RAM and fixes the RGB-controller firmware so the RAM can remember a saved color across shutdowns and restarts.
+Native Windows x64 OpenRGB plugins for V-COLOR Manta XFinity DDR5 RAM and Creative Pebble Pro speakers, plus the firmware patches that let each device restore saved lighting after power loss.
 
-There are two parts to that goal:
+| Device | Control | Persistent lighting |
+| --- | --- | --- |
+| V-Color Manta XFinity TMXFL1660830WWK | Eight independent LEDs per DIMM, 15 modes, hardware speed control | Patched v1 ENE firmware |
+| Creative Pebble Pro | Both speaker rings together; Direct, Static, Pulsate, Cycle, Off | Patched v1 firmware with explicit save and readback |
 
-- **OpenRGB control:** let OpenRGB set the RAM's lighting and send an explicit save command.
-- **Persistent colors:** repair the controller's save and startup-restore routines so it can restore the saved lighting when it starts, without waiting for RGB software to reapply it.
+## Install the plugins
 
-This repository includes the **final E000 firmware**, reproducible build tools, offline tests, a Windows flashing tool, and a Windows OpenRGB bridge. The bridge provides lighting control and Save to Device; persistent colors require the firmware patch. Flashing the firmware fixes persistence; it does not by itself add a device to OpenRGB.
+1. Install Windows x64 OpenRGB with plugin API **5** and **Qt 6.8.3 MSVC x64**, including its PawnIO driver. Tested host: OpenRGB v1.1, commit `8e16de27858cf2be6af54a33ce003df74cb9fd3e`. Other Qt/plugin ABI versions are not interchangeable.
+2. Fully exit the OpenRGB desktop app, including its tray icon. Its session-0 Windows service may remain running.
+3. Download/extract this repository and run [bin/Install.cmd](bin/Install.cmd). Keep the bin folder together. Accept elevation as the same Windows user that runs OpenRGB.
+4. Open OpenRGB and accept its administrator prompt. Enable both plugins in the Plugins page if necessary. Select the RAM or speakers in Devices.
 
-## What the firmware fixes
+The installer copies only the two plugin DLLs into `%APPDATA%\OpenRGB\plugins`, explicitly enables them, and makes OpenRGB request administrator privileges by default. UAC still prompts. For portable installations pass `-OpenRGBDir` and `-SettingsDir` to `bin/Plugins.ps1`; the latter contains OpenRGB.json and the plugins folder.
 
-The supported stock firmware writes saved lighting settings to nonexistent addresses. Nothing is stored, so saved colors do not persist across shutdowns and restarts at all. The startup restore routine also uses the wrong byte layout for saved LED counts.
+This OpenRGB build loads plugins in the desktop application, **not its headless Windows service**. Keep the elevated desktop app running for live control. Enable Shared SMBus Access so native OpenRGB, its service and the RAM plugin coordinate bus transactions. SDK clients need OpenRGB's Serve all devices setting to see plugin controllers.
 
-The patched firmware redirects saving and restoring to the same writable settings block and fixes restoration of the channel and LED counts. It preserves the existing settings format and color arrays. After compatible software explicitly saves your lighting, the controller can restore it at startup. Ordinary Apply only changes the current lighting; it does not save it to flash. See the [flashing and persistence guide](firmware/FLASHING.md) for installation and verification.
+Use **Save to Device** to store the current lighting; normal updates and profile loads remain volatile. Installing plugins does not flash firmware. RAM persistence requires the patched v1 firmware. Stock Pebble firmware does not expose this RGB command/query protocol and is deliberately rejected by speaker discovery.
 
-## Supported hardware
+## Firmware
 
-The supplied firmware and flashing tools target V-COLOR Manta XFinity RAM, model **TMXFL1660830WWK**, with ENE chip-ID bytes `77 30` and firmware signature `A8 32 16 E8 8C`. They support only the exact stock firmware image documented in the [development guide](firmware/DEVELOPMENT.md); a matching product name or controller identity alone is not enough.
+- [V-Color ENE firmware and flashing](firmware/FLASHING.md): patched v1 image, stock-image guards, per-DIMM flashing tool, checksums and tests. RAM model TMXFL1660830WWK, chip ID `77 30`, firmware signature `A8 32 16 E8 8C`; only the exact documented stock image is supported.
+- [Creative Pebble Pro firmware, protocol and installation](firmware/creative-pebble-pro/README.md): patched v1 update container, build source, query/color helper and offline validation. Confirmed saved red Pulsate returns after disconnecting both power inputs. This does not establish recovery after an interrupted full firmware update.
 
-ARGB controller: **ENE 6K7732**, identified by the embedded firmware labels (physical package marking has not been inspected). Chip-ID bytes: `77 30`.
+The firmware patches change lighting controllers, not DDR SPD or audio drivers. Flashing is a separate, explicit operation; read the applicable device guide.
 
-Embedded firmware name strings:
+## Build and validation
 
-- Application: `6K7732-20260814-QFN32-OLED`
-- Bootloader: `6K7732BT20200731`
+See [plugins/README.md](plugins/README.md) for the pinned OpenRGB headers, Qt/compiler setup, offline protocol tests, build output and hardware validation limits. CI builds both DLLs and runs installer settings tests plus both firmware suites without hardware access. Prebuilt DLLs are in bin; CI artifacts contain the same installer layout rebuilt from source.
 
-## Install the OpenRGB bridge
+Run `bin/Uninstall.cmd` with the desktop app closed to remove the two DLLs. Firmware and settings backups are retained. See [bin/README.md](bin/README.md) for removal and restoring backups.
 
-The bridge supports Windows x64, AMD PIIX4 SMBus, and eight LEDs per DIMM; port 0 is the hardware-tested configuration. Intel SMBus and Linux are not implemented.
-
-1. Install OpenRGB with its PawnIO driver. Run OpenRGB once, then close it completely, including its tray icon. Close other RAM lighting applications.
-2. Download the [Windows x64 ZIP](https://github.com/AOEChamp/v-color-manta-xfinity-openrgb/releases/latest/download/VColor-OpenRGB-Bridge-Windows-x64.zip), extract it, and run **Install.cmd** from the extracted folder. Keep all extracted files together. Accept elevation using the same Windows account you use for OpenRGB. The repository's [bin folder](bin/) contains the same files.
-3. Wait for **Installed and running**, then open OpenRGB normally and accept its administrator prompt. The bridge devices connect through the saved SDK connection.
-
-The installer copies the bridge to `%LOCALAPPDATA%\Programs\VColorOpenRGBBridge` and starts it silently at sign-in. No separate Python installation is needed for the bridge. Apply your lighting and use **Save to Device** on each DIMM to persist it with patched E000 firmware; ordinary Apply does not save.
-
-See [bridge setup, configuration and removal](bin/README.txt) for portable OpenRGB paths, custom settings files, logs, and uninstalling. See [bridge development](src/README.md) for source and build instructions. The bridge does not flash firmware; use the separate instructions below.
-
-### Lighting modes
-
-The RAM mode list includes Direct, Static and Off, plus the firmware effects: Breathing, Flashing, Spectrum Cycle, Rainbow, Chase Fade (fixed-color and rainbow), Chase (fixed-color and rainbow), Random Flicker, Stack, Pong and Fill Up. Hardware effects expose a speed slider; fixed-color effects also expose per-LED colors. Random Flicker uses each LED's stored color with the supplied firmware. Save to Device stores the selected effect and speed with patched E000 firmware.
-
-Effect IDs are confirmed from the firmware dispatcher. Static, Rainbow and fixed-color Chase have been visually tested. Other effect names and the speed range follow the related ENE controller. The patched firmware changes Random Flicker to scale each LED's stored color by the existing random intensity, retaining its timing and speed behavior. There is no dedicated lightning/storm mode.
-
-## Quick flashing
-
-Download the [final firmware flasher](https://github.com/AOEChamp/v-color-manta-xfinity-openrgb/releases/latest/download/VColor-E000-Flasher-Windows-x64.zip) and extract it, or use the [firmware folder](firmware/) in this repository.
-Install Python 3.12 and OpenRGB with its PawnIO driver. The default OpenRGB folder is `C:\Program Files\OpenRGB`; pass `-OpenRGBDir` to the launcher for another location. Close all RGB/SMBus applications, open **PowerShell as Administrator**, and change to this repository's directory.
-
-```powershell
-# List DIMMs, select a controller, and flash it:
-.\firmware\Flash.ps1
-```
-
-The selector shows the RGB controller's hardware identity and SMBus address. Windows DIMM slot/manufacturer/part names are also listed; Windows does not reliably map those slots to RGB addresses, so the tool does not guess that association. Discovery checks only RGB addresses `0x70..0x73` on PIIX4 port 0. A matching identity is not proof of compatible stock firmware; the installer retains its stock-page preflight.
-
-Flash one selected module per run, then check the generated report before repeating for another module. Keep power stable. Reports are saved in `firmware/reports/`. See the full flashing guide below for prerequisites, verification, and failure handling.
-
-- [Firmware development, changes, validation, and porting](firmware/DEVELOPMENT.md)
-- [Flashing and persistence testing](firmware/FLASHING.md)
-- [Supported tools and developer commands](firmware/tools/README.md)
-
-This is an independent interoperability project, with no manufacturer endorsement. See [third-party notices](THIRD_PARTY_NOTICES.md).
+Independent interoperability work; no vendor endorsement. Project source is GPL-2.0-or-later. Firmware containers include third-party code with separate rights; see [third-party notices](THIRD_PARTY_NOTICES.md).

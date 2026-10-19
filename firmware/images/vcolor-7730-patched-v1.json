@@ -1,0 +1,70 @@
+{
+  "version": "patched v1",
+  "hardware_access": false,
+  "source_sha256": "beaa0db9a2cee7c0ad0af668fd3860b3a1b4d327f7150941d39d0f3db40c278a",
+  "storage_patches": [
+    {
+      "address": "0x4184",
+      "before": "3f20c002",
+      "after": "1c20c002",
+      "reason": "command 02 first erase page"
+    },
+    {
+      "address": "0x41ce",
+      "before": "3f20c002",
+      "after": "1c20c002",
+      "reason": "command 55 first erase page"
+    },
+    {
+      "address": "0x6b42",
+      "before": "3f20c002",
+      "after": "1c20c002",
+      "reason": "AA save first page"
+    },
+    {
+      "address": "0x4208",
+      "before": "80f80100",
+      "after": "80e00000",
+      "reason": "erase second page; third derived by +80"
+    },
+    {
+      "address": "0x6b7c",
+      "before": "80f80100",
+      "after": "80e00000",
+      "reason": "save second page; third derived by +80"
+    },
+    {
+      "address": "0x6ed4",
+      "before": "00f60100",
+      "after": "00e00000",
+      "reason": "validator and restore source"
+    }
+  ],
+  "candidate_sha256": "43a01f0446d3069e3057d5a0ec8c3c176a0dc1be262fba7cb9ee916333feb105",
+  "application_checksum": "0xffc45922",
+  "header_checksum": "0x46f",
+  "application_checksum_end": "0xb747",
+  "settings_range": "0xE000..0xE17F",
+  "changed_pages_from_original": [
+    "0x2000",
+    "0x3480",
+    "0x4180",
+    "0x4200",
+    "0x6b00",
+    "0x6e00",
+    "0x6e80"
+  ],
+  "restore_patch": {
+    "address": "0x6e4e",
+    "before": "002007e007490a5c0146a131044b5a54411c88b20228f5db7047",
+    "after": "0849064ba03308785870002098704878d870704700bf00bf00bf"
+  },
+  "flicker_patch": {
+    "address": "0x34a8",
+    "before": "019803f085fa0090684600786a00aa18a1698854684640786a00aa18a16989184870684680786a00aa18a16989188870",
+    "after": "6069032169434018a3695b1803216a46927906785643360a1e70013001330139f7d100bf00bf00bf00bf00bf00bf00bf"
+  },
+  "behavior": "Mode13: output[i,c] = stored[i,c] * intensity[i] >> 8; intensity remains 16 or128",
+  "settings_format_unchanged": true,
+  "status": "Reproducible offline build; hardware validation is documented separately"
+}

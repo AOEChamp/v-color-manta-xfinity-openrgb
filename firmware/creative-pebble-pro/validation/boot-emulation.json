@@ -1,0 +1,304 @@
+{
+  "crc_cases": [
+    {
+      "length": 0,
+      "crc32": 0
+    },
+    {
+      "length": 9,
+      "crc32": 3421780262
+    },
+    {
+      "length": 380,
+      "crc32": 1331239733
+    },
+    {
+      "length": 124,
+      "crc32": 1884874928
+    }
+  ],
+  "boot_cases": {
+    "stock_primary": {
+      "outcome": "application",
+      "steps": 25030,
+      "mappings": [
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 12288,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        }
+      ],
+      "messages": []
+    },
+    "patched_primary": {
+      "outcome": "application",
+      "steps": 25030,
+      "mappings": [
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 12288,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        }
+      ],
+      "messages": []
+    },
+    "primary_bad_magic_secondary_valid": {
+      "outcome": "application",
+      "steps": 25328,
+      "mappings": [
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 12288,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 1040384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 1040384,
+          "address": 3204448256,
+          "encrypted": 0
+        }
+      ],
+      "messages": []
+    },
+    "both_app_headers_invalid": {
+      "outcome": "adfu",
+      "steps": 25418,
+      "mappings": [
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 12288,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 1040384,
+          "address": 3204448256,
+          "encrypted": 0
+        }
+      ],
+      "messages": [
+        "[E] ",
+        "boot: invalid app\n"
+      ]
+    },
+    "primary_param_bad_crc_secondary_valid": {
+      "outcome": "application",
+      "steps": 22064,
+      "mappings": [
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 12288,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 12288,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 1040384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 1040384,
+          "address": 3204448256,
+          "encrypted": 0
+        }
+      ],
+      "messages": []
+    },
+    "both_param_copies_bad_crc": {
+      "outcome": "adfu",
+      "steps": 18376,
+      "mappings": [
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 12288,
+          "address": 3187671040,
+          "encrypted": 0
+        }
+      ],
+      "messages": [
+        "[E] ",
+        "Not find System param partition!\n"
+      ]
+    },
+    "hardware_recovery_condition": {
+      "outcome": "adfu",
+      "steps": 46,
+      "mappings": [],
+      "messages": [
+        "[E] ",
+        "jump_to_adfu\n"
+      ]
+    },
+    "body_corrupted_magic_intact": {
+      "outcome": "application",
+      "steps": 25030,
+      "mappings": [
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 12288,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 0,
+          "flash_offset": 4096,
+          "address": 3187671040,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        },
+        {
+          "slot": 1,
+          "flash_offset": 16384,
+          "address": 3204448256,
+          "encrypted": 0
+        }
+      ],
+      "messages": []
+    }
+  },
+  "actual_bootloader_code_executed": true,
+  "limitations": [
+    "Synthetic flash slots, not read from the device.",
+    "ROM API/peripheral behavior stubbed; flash encryption configuration assumed.",
+    "Application execution stops at its entry; a subsequent hang is not detected here.",
+    "Recovery GPIO-to-button mapping and live ADFU operation unverified.",
+    "Bootloader initial ROM authentication/load stage not emulated."
+  ]
+}

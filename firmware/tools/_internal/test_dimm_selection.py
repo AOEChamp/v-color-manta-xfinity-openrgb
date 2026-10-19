@@ -3,7 +3,7 @@ from unittest.mock import patch
 import discovery
 import flash
 import test_installer as fixtures
-import final_installer as stock
+import page_installer as stock
 import bootloader as boot
 
 

@@ -1,9 +1,9 @@
-"""Install the exact E000 candidate on 0x71 in one bootloader session only."""
+"""Install patched v1 through a bounded, selected-target bootloader session."""
 import time
-from patch_storage import build, SOURCE, OUTPUT, ROOT
+from firmware_image import build, SOURCE, OUTPUT, ROOT
 import bootloader as boot
 
-ORDER = (0x4180, 0x4200, 0x6B00, 0x6E80, 0x2000)
+ORDER = (0x3480, 0x4180, 0x4200, 0x6B00, 0x6E00, 0x6E80, 0x2000)
 WP = (0x444, 0x44C, 0x454)
 READS = sorted({p + delta for p in ORDER for delta in (-128, 0, 128)} |
                {0, 0xE000, 0xE080, 0xE100})

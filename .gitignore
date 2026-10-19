@@ -7,8 +7,5 @@ firmware/images/config-*.bin
 firmware/images/acquisition-*.json
 firmware/reports/
 
-/build/
+**/build/
 **/logs/
-**/bridge-config.json
-**/install-state.json
-!/bin/_internal/*.pyd
