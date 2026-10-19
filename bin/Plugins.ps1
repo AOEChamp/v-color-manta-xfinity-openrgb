@@ -16,12 +16,7 @@ function Read-Settings([string]$Path) {
     return ,($parser.DeserializeObject([IO.File]::ReadAllText($Path)))
 }
 
-function Convert-BridgeConnection($Settings) {
-    if ($Settings.ContainsKey('Client') -and $Settings['Client'] -and $Settings['Client'].ContainsKey('clients')) {
-        $Settings['Client']['clients'] = @($Settings['Client']['clients'] | Where-Object {
-            -not ($_.ContainsKey('ip') -and $_.ContainsKey('port') -and $_['ip'] -eq '127.0.0.1' -and $_['port'] -eq 6743)
-        })
-    }
+function Enable-PluginSettings($Settings) {
     # Explicitly enable the installed plugins, preserving unrelated entries.
     if (-not $Settings.ContainsKey('Plugins')) { $Settings['Plugins'] = @{} }
     if (-not $Settings['Plugins']) { $Settings['Plugins'] = @{} }
@@ -62,7 +57,7 @@ if ($Action -eq 'Uninstall') {
         $target = Join-Path $pluginsDir $name
         if (Test-Path -LiteralPath $target) { Remove-Item -LiteralPath $target }
     }
-    Write-Output 'Plugins removed. The old bridge remains disabled; backups are retained. Firmware was not changed.'
+    Write-Output 'Plugins removed. Backups are retained. Firmware was not changed.'
     exit 0
 }
 foreach ($name in @('PawnIOLib.dll','SmbusPIIX4.bin','hidapi-hotplug.dll')) {
@@ -73,14 +68,7 @@ foreach ($name in $payloadNames) {
 }
 $settingsPath = Join-Path $SettingsDir 'OpenRGB.json'
 $settings = if (Test-Path -LiteralPath $settingsPath) { Read-Settings $settingsPath } else { @{} }
-$null = Convert-BridgeConnection $settings
-$taskName = 'VColorOpenRGBBridge-' + $identity.User.Value
-$task = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
-$bridgeRoot = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'Programs\VColorOpenRGBBridge'
-$bridgeScript = Join-Path $bridgeRoot 'Bridge.ps1'
-if ($task -and ($task.Actions.Count -ne 1 -or $task.Actions[0].Arguments -notlike ('*"' + $bridgeScript + '"*'))) {
-    throw 'Unexpected bridge startup task; no changes made.'
-}
+$null = Enable-PluginSettings $settings
 $backup = Join-Path $SettingsDir ('plugin-backups\' + [guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force -Path $backup,$pluginsDir | Out-Null
 $existing = @()
@@ -92,19 +80,8 @@ foreach ($name in $payloadNames) {
 }
 $hadSettings = Test-Path -LiteralPath $settingsPath
 if ($hadSettings) { Copy-Item -LiteralPath $settingsPath -Destination (Join-Path $backup 'OpenRGB.json') }
-$changedTask = $false
 $changedElevation = $false
 try {
-    if ($task) {
-        Export-ScheduledTask -TaskName $taskName | Set-Content -LiteralPath (Join-Path $backup 'bridge-task.xml')
-        Disable-ScheduledTask -TaskName $taskName | Out-Null
-        $changedTask = $true
-    }
-    if (Test-Path -LiteralPath $bridgeScript) {
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $bridgeScript -Action Stop
-        if ($LASTEXITCODE -ne 0) { throw 'Could not stop the old bridge' }
-    }
-    if (Get-Process VColorOpenRGBBridge -ErrorAction SilentlyContinue) { throw 'Stop all RAM bridge instances before installing.' }
     foreach ($name in $payloadNames) { Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination (Join-Path $pluginsDir $name) -Force }
     Write-Settings $settings $settingsPath
     $layers = 'HKCU:\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers'
@@ -115,8 +92,8 @@ try {
         New-ItemProperty -LiteralPath $layers -Name $executable -Value $newFlags -PropertyType String -Force | Out-Null
         $changedElevation = $true
     }
-    @{openrgb=$executable; previous_elevation_flags=$oldFlags; bridge_task=$taskName; previous_bridge_enabled=[bool]($task -and $task.Settings.Enabled)} |
-        ConvertTo-Json | Set-Content -LiteralPath (Join-Path $backup 'migration.json')
+    @{openrgb=$executable; previous_elevation_flags=$oldFlags} |
+        ConvertTo-Json | Set-Content -LiteralPath (Join-Path $backup 'installation.json')
     Write-Output "Installed both native plugins. Backup: $backup. Open OpenRGB and accept its administrator prompt. No firmware was flashed."
 } catch {
     if ($changedElevation) {
@@ -130,7 +107,5 @@ try {
     }
     if ($hadSettings) { Copy-Item -LiteralPath (Join-Path $backup 'OpenRGB.json') -Destination $settingsPath -Force }
     elseif (Test-Path -LiteralPath $settingsPath) { Remove-Item -LiteralPath $settingsPath }
-    if ($changedTask -and $task.Settings.Enabled) { Enable-ScheduledTask -TaskName $taskName | Out-Null }
-    if ($changedTask -and $task.State -eq 'Running') { Start-ScheduledTask -TaskName $taskName }
     throw
 }

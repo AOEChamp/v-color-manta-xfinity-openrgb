@@ -6,7 +6,7 @@ $ErrorActionPreference = 'Stop'
 $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $principal = [Security.Principal.WindowsPrincipal]::new($identity)
 if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) { throw 'Run PowerShell as Administrator.' }
-$competing = @(Get-Process | Where-Object { $_.ProcessName -match '^(GCC|OpenRGB|VColorOpenRGBBridge|SignalRgb|SignalRgbLauncher|hid|v-color|RGBFusion.*)$' })
+$competing = @(Get-Process | Where-Object { $_.ProcessName -match '^(GCC|OpenRGB|SignalRgb|SignalRgbLauncher|hid|v-color|RGBFusion.*)$' })
 if ($competing.Count) { throw 'Close competing RGB applications before flashing.' }
 $OpenRGBDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OpenRGBDir)
 Push-Location $PSScriptRoot

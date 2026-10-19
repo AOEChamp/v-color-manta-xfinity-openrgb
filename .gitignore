@@ -9,5 +9,3 @@ firmware/reports/
 
 **/build/
 **/logs/
-**/bridge-config.json
-**/install-state.json

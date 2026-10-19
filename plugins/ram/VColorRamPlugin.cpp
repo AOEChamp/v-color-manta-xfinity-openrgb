@@ -5,7 +5,6 @@
 #include <QMetaObject>
 #include <QEventLoop>
 #include <QThread>
-#include <tlhelp32.h>
 
 OpenRGBPluginInfo VColorRamPlugin::GetPluginInfo() {
     OpenRGBPluginInfo info{};
@@ -21,13 +20,6 @@ void VColorRamPlugin::Message(const std::string& message,bool error) {
     },Qt::QueuedConnection);
 }
 
-static bool BridgeRunning() {
-    HANDLE snapshot=CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);
-    if(snapshot==INVALID_HANDLE_VALUE)throw std::runtime_error("Cannot check for the RAM bridge");
-    PROCESSENTRY32W entry{};entry.dwSize=sizeof(entry);bool found=false;
-    if(Process32FirstW(snapshot,&entry))do{if(!_wcsicmp(entry.szExeFile,L"VColorOpenRGBBridge.exe")){found=true;break;}}while(Process32NextW(snapshot,&entry));
-    CloseHandle(snapshot);return found;
-}
 void VColorRamPlugin::Load(OpenRGBPluginAPIInterface* plugin_api) {
     api=plugin_api;stopping=false;Scan();
 }
@@ -36,7 +28,7 @@ QWidget* VColorRamPlugin::GetWidget() {
     widget=new QWidget;auto layout=new QVBoxLayout(widget);
     auto help=new QLabel("Eight LEDs per DIMM and 15 lighting modes. Select a RAM device in Devices.\n"
         "Save to Device requires the patched v1 DIMM firmware. Ordinary updates remain volatile.\n"
-        "Run the desktop app as administrator. Stop the V-Color bridge before scanning.");
+        "Run the desktop app as administrator.");
     help->setWordWrap(true);layout->addWidget(help);
     status=new QLabel("Use Rescan to check RAM status.");status->setWordWrap(true);layout->addWidget(status);
     auto rescan=new QPushButton("Rescan RAM");layout->addWidget(rescan);
@@ -53,7 +45,6 @@ void VColorRamPlugin::Scan() {
 }
 
 void VColorRamPlugin::Discover() {
-    if(BridgeRunning())throw std::runtime_error("Stop VColorOpenRGBBridge before using the native RAM plugin");
     if(!bus)bus=std::make_unique<VColor::PawnBus>();
     for(unsigned address=0x70;address<=0x73;++address){
         if(stopping)return;
@@ -103,7 +94,6 @@ void VColorRamPlugin::Device::Apply(bool save) {
     std::lock_guard<std::mutex> lock(lifecycle);
     if(initializing||plugin->stopping||!controller)return;
     try{
-        if(BridgeRunning())throw std::runtime_error("RAM bridge is running; native writes blocked");
         VColor::Colors colors{};for(unsigned i=0;i<8;++i)colors[i]=controller->GetColor(i);
         unsigned selected=controller->GetActiveMode();
         if(selected>=15)throw std::runtime_error("Invalid lighting mode");

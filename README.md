@@ -16,8 +16,6 @@ Native Windows x64 OpenRGB plugins for V-COLOR Manta XFinity DDR5 RAM and Creati
 
 The installer copies only the two plugin DLLs into `%APPDATA%\OpenRGB\plugins`, explicitly enables them, and makes OpenRGB request administrator privileges by default. UAC still prompts. For portable installations pass `-OpenRGBDir` and `-SettingsDir` to `bin/Plugins.ps1`; the latter contains OpenRGB.json and the plugins folder.
 
-**Upgrading from the bridge:** installation disables the recognized per-user VColorOpenRGBBridge startup task, stops its installed process, and removes only the saved `127.0.0.1:6743` SDK connection. It preserves the old installation and backs up settings, replaced DLLs and task XML under the selected settings folder's `plugin-backups`. Existing profiles may need to be saved again because native RAM controller names differ from the bridge names. No bridge process, Python runtime, or SDK loopback connection is needed for plugin control.
-
 This OpenRGB build loads plugins in the desktop application, **not its headless Windows service**. Keep the elevated desktop app running for live control. Enable Shared SMBus Access so native OpenRGB, its service and the RAM plugin coordinate bus transactions. SDK clients need OpenRGB's Serve all devices setting to see plugin controllers.
 
 Use **Save to Device** to store the current lighting; normal updates and profile loads remain volatile. Installing plugins does not flash firmware. RAM persistence requires the patched v1 firmware. Stock Pebble firmware does not expose this RGB command/query protocol and is deliberately rejected by speaker discovery.
@@ -31,8 +29,8 @@ The firmware patches change lighting controllers, not DDR SPD or audio drivers. 
 
 ## Build and validation
 
-See [plugins/README.md](plugins/README.md) for the pinned OpenRGB headers, Qt/compiler setup, offline protocol tests, build output and hardware validation limits. CI builds both DLLs and runs installer migration tests plus both firmware suites without hardware access. Prebuilt DLLs are in bin; CI artifacts contain the same installer layout rebuilt from source.
+See [plugins/README.md](plugins/README.md) for the pinned OpenRGB headers, Qt/compiler setup, offline protocol tests, build output and hardware validation limits. CI builds both DLLs and runs installer settings tests plus both firmware suites without hardware access. Prebuilt DLLs are in bin; CI artifacts contain the same installer layout rebuilt from source.
 
-Run `bin/Uninstall.cmd` with the desktop app closed to remove the two DLLs. This leaves firmware, backups and the old disabled bridge installation intact. See [bin/README.md](bin/README.md) for rollback.
+Run `bin/Uninstall.cmd` with the desktop app closed to remove the two DLLs. Firmware and settings backups are retained. See [bin/README.md](bin/README.md) for removal and restoring backups.
 
 Independent interoperability work; no vendor endorsement. Project source is GPL-2.0-or-later. Firmware containers include third-party code with separate rights; see [third-party notices](THIRD_PARTY_NOTICES.md).
