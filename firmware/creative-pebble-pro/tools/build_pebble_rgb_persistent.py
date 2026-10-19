@@ -99,16 +99,16 @@ def build_code():
     a.const(9, WIRE_MAGIC)
     a.branch(5, 10, 9, 'fallback')
     a.op(0x25, 10, 8, 4)
-    a.op(9,9,0,0x203)        # v3 opcode 2: query, nonce in bytes 6..8
+    a.op(9,9,0,0x203)        # format 0x03, query opcode: nonce in bytes 6..8
     a.op(9,12,0,5)
     a.branch(4,10,9,'query_guard')
     a.op(9, 9, 0, 0x101)
-    a.op(9, 12, 0, 1)        # v1 remains static, ignoring reserved mode byte
+    a.op(9, 12, 0, 1)        # format 0x01: static color; mode byte is reserved
     a.branch(4, 10, 9, 'pack')
-    a.op(9, 9, 0, 0x102)     # v2/opcode 1 adds mode at offset 9
+    a.op(9, 9, 0, 0x102)     # format 0x02, set opcode: mode at offset 9
     a.op(9, 13, 0, 0)
     a.branch(4, 10, 9, 'read_mode')
-    a.op(9, 9, 0, 0x103)     # v3 adds explicit save flag at offset 10
+    a.op(9, 9, 0, 0x103)     # format 0x03, set opcode: save flag at offset 10
     a.branch(5, 10, 9, 'fallback')
     a.op(0x24, 13, 8, 10)
     a.op(0xb, 9, 13, 2)
@@ -337,7 +337,7 @@ def build_code():
     for offset in range(16,80,4):a.op(0x2b,0,29,offset)
     a.const(8,WIRE_MAGIC)
     a.op(0x2b,8,29,16)
-    a.const(8,0x000f8203)    # version 3, reply opcode 82, capabilities 0f
+    a.const(8,0x000f8203)    # format 0x03, reply opcode 82, capabilities 0f
     a.op(0x2b,8,29,20)
     a.op(15,8,0,0xbfc2)
     for source,dest in ((0x5356,23),(0x6785,24),(0x6784,25),(0x6786,26),
@@ -381,7 +381,7 @@ def main():
     # All aligned pointers into the reclaimed HID log text must be retired.
     refs = [p for p in range(0, len(data)-3, 4)
             if BASE+CAVE <= struct.unpack_from('<I', data, p)[0] < BASE+LIMIT]
-    # This expanded region consists solely of diagnostic format/function names.
+    # The reclaimed region consists solely of diagnostic format/function names.
     assert original[CAVE:LIMIT].startswith(b'send messag in isr')
     assert all(x==0 or x in (10,13) or 32<=x<127 for x in original[CAVE:LIMIT])
     starts={CAVE}|{i+1 for i in range(CAVE,LIMIT-1) if original[i]==0 and original[i+1]!=0}

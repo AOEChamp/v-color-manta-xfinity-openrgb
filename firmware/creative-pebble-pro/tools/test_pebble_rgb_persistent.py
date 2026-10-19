@@ -212,7 +212,7 @@ def main():
     m.apply();assert m.pwm==[bytes((8,7,9))]
     assert struct.unpack('<I',m.u.mem_read(MAILBOX & 0x1fffffff,4))[0]==0x010c0b0a
     m.apply();assert m.pwm==[bytes((11,10,12))]
-    # Version 2: every mode with varied RGB, and complete exact-color pulse
+    # Format 0x02: every mode with varied RGB, and complete exact-color pulse
     # cycles. Native cycle callee is stubbed; mode routing/init are checked.
     mode_cases=0;pulse_ticks=0
     for rgb in colors:
