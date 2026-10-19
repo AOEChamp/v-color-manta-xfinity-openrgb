@@ -1,4 +1,4 @@
-"""Rebuild the tested protocol-v3 container offline; never access a device.
+"""Rebuild the patched v1 container offline; never access a device.
 
 The shipped manifest reverses the local patch to recover the exact stock input.
 All recovered and rebuilt bytes are checked against the known image hashes.
@@ -14,7 +14,7 @@ PATCHED='7fe19a661d17c2abd1de215c65afb5ae87d1775474c150274f0614a5c7dd90fe'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 
 def main():
-    shipped=(ROOT/'images/MF1710-RGB-v3.fw').read_bytes()
+    shipped=(ROOT/'images/MF1710-RGB-patched-v1.fw').read_bytes()
     assert sha(shipped)==PATCHED,'Unexpected packaged firmware'
     image=Image(shipped)
     decoded=WORK/'decoded';decoded.mkdir(parents=True,exist_ok=True)
@@ -43,7 +43,7 @@ def main():
     assert sha(original)==STOCK,'Recovered stock container differs'
     with contextlib.redirect_stdout(io.StringIO()):
         runpy.run_path(str(ROOT/'tools/build_pebble_rgb_persistent.py'),run_name='__main__')
-    candidate=WORK/'rgb-v3'
+    candidate=WORK/'patched-v1'
     encoded=(candidate/'zephyr-rgb.encoded.bin').read_bytes()
     result=Image(original).replace_xor(image.entry(b'ZEPHYR  BIN'),encoded)
     assert result==shipped,'Rebuild differs from tested firmware'
@@ -69,7 +69,7 @@ def main():
         n=min(image.cluster_size,len(encoded)-i*image.cluster_size)
         allowed.update(range(16+image.offset(c),16+image.offset(c)+n))
     assert all(i in allowed for i,(a,b) in enumerate(zip(original,result)) if a!=b)
-    (candidate/'MF1710-RGB-v3.fw').write_bytes(result)
+    (candidate/'MF1710-RGB-patched-v1.fw').write_bytes(result)
     report={'stock_sha256':STOCK,'container_sha256':sha(result),'exact_shipped_rebuild':True,
             'application_bytes':len(encoded),'container_bytes':len(result),'application_slot_bytes':slots,
             'bootloader_and_other_members_unchanged':True,'parameter_crc_valid':True,

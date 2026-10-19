@@ -93,7 +93,7 @@ def run():
                 'source buffer and neighboring bytes unchanged', 'actual mode13 dispatch',
                 'LED-count fix retained', 'save/startup mode13 and colors', 'firmware/header checksums'],
         limitation='No hardware flash or visible-output test; changes existing mode13 behavior')
-    (ROOT.parent/'reports/e000-flicker-tests.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+    (ROOT.parent/'reports/patched-v1-flicker-tests.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
     print(json.dumps(result,indent=2))
 
 

@@ -1,11 +1,11 @@
-"""Discover RGB DIMMs and install exact final firmware on the user's selection."""
+"""Discover RGB DIMMs and install patched v1 on the user's selection."""
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent / '_internal'))
 import argparse
 import datetime
 import json
-import final_installer as stock
+import page_installer as stock
 import bootloader as boot
 from firmware_image import ROOT
 import transport as module

@@ -8,8 +8,8 @@
 
 OpenRGBPluginInfo PebbleProPlugin::GetPluginInfo() {
     OpenRGBPluginInfo info{};
-    info.Name="Creative Pebble Pro";info.Version="0.1.0";info.Commit="local-protocol-v3";
-    info.Description="Mode, color and Save to Device for Pebble Pro custom firmware v3. Both rings share one zone.";
+    info.Name="Creative Pebble Pro";info.Version="0.1.0";info.Commit="patched-v1";
+    info.Description="Mode, color and Save to Device for Pebble Pro patched v1 firmware. Both rings share one zone.";
     info.Location=OPENRGB_PLUGIN_LOCATION_SETTINGS;info.Label="Pebble Pro";
     info.ProtocolVersion=0;return info;
 }
@@ -37,7 +37,7 @@ QWidget* PebbleProPlugin::GetWidget() {
     auto layout=new QVBoxLayout(widget);
     auto help=new QLabel("Both speaker rings share one color and mode. Select the device in Devices to control lighting.\n"
         "Save to Device stores the current mode/color as the power-on default. Ordinary updates and profiles stay volatile.\n"
-        "Requires the custom Pebble Pro protocol-v3 firmware. Discovery only queries identity/state.");
+        "Requires Pebble Pro patched v1 firmware. Discovery only queries identity/state.");
     help->setWordWrap(true);layout->addWidget(help);
     status=new QLabel("Detecting speakers...");status->setWordWrap(true);layout->addWidget(status);
     auto rescan=new QPushButton("Rescan speakers");layout->addWidget(rescan);
@@ -78,8 +78,8 @@ void PebbleProPlugin::Discover() {
             // Query must identify custom firmware before registration or writes.
             RGBController_Setup setup{};
             setup.name="Creative Pebble Pro";setup.vendor="Creative";
-            setup.description="Custom firmware v3; both speaker rings combined";
-            setup.version="Custom RGB protocol 3";setup.serial=path;
+            setup.description="Patched v1 firmware; both speaker rings combined";
+            setup.version="Patched v1";setup.serial=path;
             setup.location="HID: "+path;setup.type=DEVICE_TYPE_SPEAKER;
             setup.flags=CONTROLLER_FLAG_VIRTUAL;
             const char* names[]={"Direct","Static","Pulsate","Cycle","Off"};
@@ -106,10 +106,10 @@ void PebbleProPlugin::Discover() {
             Device* registered=d.get();devices.push_back(std::move(d));
             api->RegisterVirtualRGBController(registered->controller);
             registered->initializing=false;
-            Message("Connected: Creative Pebble Pro, custom protocol v3. Current lighting preserved.");
+            Message("Connected: Creative Pebble Pro, patched v1 firmware. Current lighting preserved.");
         }catch(const std::exception& e){Message(std::string("Device not registered: ")+e.what(),true);}
     }
-    if(devices.empty())Message("No compatible speakers found. Connect the Pebble Pro with custom protocol-v3 firmware.");
+    if(devices.empty())Message("No compatible speakers found. Connect the Pebble Pro with patched v1 firmware.");
 }
 
 void PebbleProPlugin::Device::Apply(bool save) {

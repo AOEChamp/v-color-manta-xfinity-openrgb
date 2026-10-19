@@ -1,7 +1,7 @@
-"""Execute final startup/save code offline, including the captured saved red block."""
+"""Execute patched v1 startup/save code offline, including the captured saved red block."""
 import hashlib
 import json
-from patch_storage import build as build_v1, SOURCE, ROOT
+from firmware_image import SOURCE, ROOT
 from firmware_image import build, OUTPUT
 from arm_emulator import Machine
 
@@ -21,12 +21,9 @@ def run():
     original = SOURCE.read_bytes()
     candidate, manifest = build(original)
     assert OUTPUT.read_bytes() == candidate
-    parent, _ = build_v1(original)
     captured = (ROOT.parent / 'tests/fixtures/saved-static-red.bin').read_bytes()
     assert len(captured) == 384 and captured[382] == 0x5A
     assert captured[383] == sum(captured[:383]) & 255
-    old = cold_start(parent, captured)
-    assert bytes(old.cpu.mem_read(0x200030A1, 3)) == bytes.fromhex('010800')
     new = cold_start(candidate, captured)
     assert bytes(new.cpu.mem_read(0x200030A1, 3)) == bytes.fromhex('010008')
     assert new.cpu.mem_read(0x20002A90, 1) == b'\x08'
@@ -71,14 +68,13 @@ def run():
         if header_ok:
             assert m.call(0x69C) == 0
     try:
-        build(parent)
+        build(candidate)
     except ValueError:
         pass
     else:
         raise AssertionError('Builder accepted a non-original image')
     result = dict(hardware_access=False, candidate_sha256=hashlib.sha256(candidate).hexdigest(),
-        passed=['v1 count-layout bug reproduced with captured hardware save',
-                'restores actual saved red and count 0008', 'engine channel count 1 and LED count 8',
+        passed=['restores actual saved red and count 0008', 'engine channel count 1 and LED count 8',
                 'AA save and fresh startup roundtrip', 'counts 1,8,16',
                 '02/55 erase paths', 'invalid settings fallback',
                 'actual ARM firmware/header checksum validators and corruption rejection',
@@ -86,5 +82,5 @@ def run():
         limitation='CPU and flash effects simulated; visible output and power-loss behavior untested')
     reports = ROOT.parent / 'reports'
     reports.mkdir(exist_ok=True)
-    (reports / 'e000-firmware-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+    (reports / 'patched-v1-firmware-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))

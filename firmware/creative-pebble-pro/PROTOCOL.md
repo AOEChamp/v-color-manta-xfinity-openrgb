@@ -1,8 +1,8 @@
 # Pebble Pro custom USB RGB protocol
 
-## Protocol version 3
+## Patched v1 wire format
 
-HID control SET_REPORT Output 03, interface 0, 64 bytes including report ID.
+HID control SET_REPORT Output 03, interface 0, 64 bytes including report ID. The message-format identifier at byte 4 is `0x03`; this byte is independent of the patched v1 release name.
 
 | Byte | Set mode/color | Query |
 | --- | --- | --- |
@@ -14,14 +14,12 @@ HID control SET_REPORT Output 03, interface 0, 64 bytes including report ID.
 | 10 | Save=1, volatile=0; other flags rejected | Reserved |
 | Remaining | Zero padding | Zero padding |
 
-Version-1 static and version-2 mode/color commands remain volatile and compatible.
 The USB callback only validates and copies one atomic mailbox word. Persistence,
 query property reads and replies run in the application timer after IRQ unlock.
 
 Query response uses **interrupt IN report 03**, not GET_REPORT or a Feature report.
 Open the generic HID input collection before issuing the control-output query.
-The native endpoint sender copies the stack response synchronously. Its semaphore
-and hardware behavior remain to be tested; a query can take time in the app loop.
+The native endpoint sender copies the stack response synchronously. A query can take time in the application loop.
 
 | Response bytes | Meaning |
 | --- | --- |

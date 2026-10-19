@@ -1,8 +1,45 @@
 {
-  "version": "E000 final",
+  "version": "patched v1",
   "hardware_access": false,
   "source_sha256": "beaa0db9a2cee7c0ad0af668fd3860b3a1b4d327f7150941d39d0f3db40c278a",
-  "parent_sha256": "50116e9c076621576f47e5489032f381b420562e836f2d2ad69c1cff8ebcefa4",
+  "storage_patches": [
+    {
+      "address": "0x4184",
+      "before": "3f20c002",
+      "after": "1c20c002",
+      "reason": "command 02 first erase page"
+    },
+    {
+      "address": "0x41ce",
+      "before": "3f20c002",
+      "after": "1c20c002",
+      "reason": "command 55 first erase page"
+    },
+    {
+      "address": "0x6b42",
+      "before": "3f20c002",
+      "after": "1c20c002",
+      "reason": "AA save first page"
+    },
+    {
+      "address": "0x4208",
+      "before": "80f80100",
+      "after": "80e00000",
+      "reason": "erase second page; third derived by +80"
+    },
+    {
+      "address": "0x6b7c",
+      "before": "80f80100",
+      "after": "80e00000",
+      "reason": "save second page; third derived by +80"
+    },
+    {
+      "address": "0x6ed4",
+      "before": "00f60100",
+      "after": "00e00000",
+      "reason": "validator and restore source"
+    }
+  ],
   "candidate_sha256": "43a01f0446d3069e3057d5a0ec8c3c176a0dc1be262fba7cb9ee916333feb105",
   "application_checksum": "0xffc45922",
   "header_checksum": "0x46f",

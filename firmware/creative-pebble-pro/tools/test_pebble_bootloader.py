@@ -16,7 +16,7 @@ E=ROOT/'build'
 BOOT=(E/'clear/mbrec.bin').read_bytes()
 PARAM=(E/'clear/param.bin').read_bytes()
 APP=(E/'clear/zephyr.bin').read_bytes()
-CANDIDATE_PATH=Path(sys.argv[1]) if len(sys.argv)>1 else E/'rgb-v3/zephyr-rgb.clear.bin'
+CANDIDATE_PATH=Path(sys.argv[1]) if len(sys.argv)>1 else E/'patched-v1/zephyr-rgb.clear.bin'
 CANDIDATE=CANDIDATE_PATH.read_bytes()
 REGS=[UC_MIPS_REG_A0,UC_MIPS_REG_A1,UC_MIPS_REG_A2,UC_MIPS_REG_A3]
 phys=lambda address:address & 0x1fffffff if 0x80000000<=address<0xc0000000 else address

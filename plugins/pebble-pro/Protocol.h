@@ -28,7 +28,7 @@ inline Report Query(uint32_t nonce) {
 inline State Parse(const Report& r,uint32_t nonce) {
     if(r[0]!=3||r[1]!='R'||r[2]!='G'||r[3]!='B'||r[4]!=3||r[5]!=0x82||r[6]!=15||
        (Word(r,28)&0xffffff)!=(nonce&0xffffff))
-        throw std::runtime_error("Not Pebble custom protocol v3 (or stale reply)");
+        throw std::runtime_error("Not Pebble patched v1 firmware (or stale reply)");
     State s;s.raw_mode=r[7];s.output=Word(r,8)&0xffffff;s.target=Word(r,12)&0xffffff;
     s.target_valid=s.raw_mode==254||s.raw_mode==255;
     uint32_t word=Word(r,20);

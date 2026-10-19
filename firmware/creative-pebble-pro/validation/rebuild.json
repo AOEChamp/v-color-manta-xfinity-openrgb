@@ -1,0 +1,14 @@
+{
+  "stock_sha256": "5c92e9dbf65713ee2435babb186aa1442d149918029208727b0e4d9e9918248b",
+  "container_sha256": "7fe19a661d17c2abd1de215c65afb5ae87d1775474c150274f0614a5c7dd90fe",
+  "exact_shipped_rebuild": true,
+  "application_bytes": 839360,
+  "container_bytes": 4890640,
+  "application_slot_bytes": [
+    950272,
+    950272
+  ],
+  "bootloader_and_other_members_unchanged": true,
+  "parameter_crc_valid": true,
+  "hardware_access": false
+}

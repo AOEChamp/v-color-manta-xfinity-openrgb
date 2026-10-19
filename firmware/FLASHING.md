@@ -1,4 +1,4 @@
-# Flash the custom RGB firmware
+# Flash V-Color patched v1 firmware
 
 ## Requirements
 
@@ -10,6 +10,8 @@
 Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the RAM plugin desktop app, and other RGB/SMBus software. Keep power stable. Flashing changes the RGB controller's program flash and can leave lighting unusable if interrupted. These tools do not write DDR SPD.
 
 ## 1. Run the flashing script
+
+The selected image is `images/vcolor-7730-patched-v1.bin`. The stock `.bin` is a build reference, not an alternate release.
 
 ```powershell
 .\firmware\Flash.ps1
@@ -58,7 +60,7 @@ After verifying the result, rerun the launcher and select a different supported 
 
 ## Save lighting and check persistence
 
-Flashing preserves the existing saved-settings block and does not apply or save a new color. Apply your desired lighting through compatible software and explicitly use its save function for this custom firmware. Ordinary OpenRGB Apply is not a save. The [OpenRGB bridge](../bin/README.txt) now provides Save to Device for this firmware.
+Flashing preserves the existing saved-settings block and does not apply or save a new color. Apply your desired lighting through compatible software and explicitly use its save function for patched v1. Ordinary OpenRGB Apply is not a save. The [native OpenRGB plugin](../plugins/README.md) provides Save to Device for patched v1.
 
 To test persistence, prevent RGB software from applying settings automatically, shut down and start the computer, and observe the LEDs before software applies anything. Record whether AC power was removed. A controller CPU restart alone does not establish power-loss persistence. Do not reapply a color before observing startup restoration.
 

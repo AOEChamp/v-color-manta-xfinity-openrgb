@@ -88,5 +88,5 @@ def run():
     result = dict(hardware_access=False, cases=cases)
     reports = installer.ROOT.parent / 'reports'
     reports.mkdir(exist_ok=True)
-    (reports / 'e000-installer-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+    (reports / 'patched-v1-installer-tests.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
     print(json.dumps(result, indent=2))

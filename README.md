@@ -4,8 +4,8 @@ Native Windows x64 OpenRGB plugins for V-COLOR Manta XFinity DDR5 RAM and Creati
 
 | Device | Control | Persistent lighting |
 | --- | --- | --- |
-| V-Color Manta XFinity TMXFL1660830WWK | Eight independent LEDs per DIMM, 15 modes, hardware speed control | Existing patched ENE E000 firmware |
-| Creative Pebble Pro | Both speaker rings together; Direct, Static, Pulsate, Cycle, Off | Custom protocol-v3 firmware with explicit save and readback |
+| V-Color Manta XFinity TMXFL1660830WWK | Eight independent LEDs per DIMM, 15 modes, hardware speed control | Patched v1 ENE firmware |
+| Creative Pebble Pro | Both speaker rings together; Direct, Static, Pulsate, Cycle, Off | Patched v1 firmware with explicit save and readback |
 
 ## Install the plugins
 
@@ -20,12 +20,12 @@ The installer copies only the two plugin DLLs into `%APPDATA%\OpenRGB\plugins`, 
 
 This OpenRGB build loads plugins in the desktop application, **not its headless Windows service**. Keep the elevated desktop app running for live control. Enable Shared SMBus Access so native OpenRGB, its service and the RAM plugin coordinate bus transactions. SDK clients need OpenRGB's Serve all devices setting to see plugin controllers.
 
-Use **Save to Device** to store the current lighting; normal updates and profile loads remain volatile. Installing plugins does not flash firmware. RAM persistence requires the existing E000 patch. Stock Pebble firmware does not expose this RGB command/query protocol and is deliberately rejected by speaker discovery.
+Use **Save to Device** to store the current lighting; normal updates and profile loads remain volatile. Installing plugins does not flash firmware. RAM persistence requires the patched v1 firmware. Stock Pebble firmware does not expose this RGB command/query protocol and is deliberately rejected by speaker discovery.
 
 ## Firmware
 
-- [V-Color ENE firmware and flashing](firmware/FLASHING.md): retains the existing final image, stock-image guards, per-DIMM flashing tool, checksums and tests. RAM model TMXFL1660830WWK, chip ID `77 30`, firmware signature `A8 32 16 E8 8C`; only the exact documented stock image is supported.
-- [Creative Pebble Pro firmware, protocol and installation](firmware/creative-pebble-pro/README.md): exact tested protocol-v3 update container, build source, query/color helper and offline validation. Confirmed saved red Pulsate returns after disconnecting both power inputs. This does not establish recovery after an interrupted full firmware update.
+- [V-Color ENE firmware and flashing](firmware/FLASHING.md): patched v1 image, stock-image guards, per-DIMM flashing tool, checksums and tests. RAM model TMXFL1660830WWK, chip ID `77 30`, firmware signature `A8 32 16 E8 8C`; only the exact documented stock image is supported.
+- [Creative Pebble Pro firmware, protocol and installation](firmware/creative-pebble-pro/README.md): patched v1 update container, build source, query/color helper and offline validation. Confirmed saved red Pulsate returns after disconnecting both power inputs. This does not establish recovery after an interrupted full firmware update.
 
 The firmware patches change lighting controllers, not DDR SPD or audio drivers. Flashing is a separate, explicit operation; read the applicable device guide.
 

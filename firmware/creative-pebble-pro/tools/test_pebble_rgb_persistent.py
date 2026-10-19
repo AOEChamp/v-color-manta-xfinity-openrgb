@@ -1,4 +1,4 @@
-"""Execute candidate MIPS32 instructions offline with Unicorn.
+"""Execute patched v1 MIPS32 instructions offline with Unicorn.
 
 Native MIPS16 callees and ISA-return boundaries are stubbed, explicitly. This
 tests the injected machine code, not a whole-device or boot emulation.
@@ -248,7 +248,7 @@ def main():
         p[9]=mode;m.rx(p)
         assert m.delegate==0xbf03a4cd and not m.writes
         rejected+=1
-    # Legacy reports ignore the reserved mode byte, preserving old clients.
+    # Format 0x01 ignores its reserved mode byte.
     packet[9]=255;m.rx(packet);m.apply()
     assert m.pwm==[bytes((8,7,9))] and m.u.mem_read(0x1fc25356,1)==b'\xff'
     # New mode/color coalesces atomically; a next command arriving after unlock
@@ -335,10 +335,10 @@ def main():
     assert decoded.mnem=='jalx' and int(decoded.body,16)==m.asm.labels['restore']
     assert (OUT/'zephyr-rgb.clear.bin').read_bytes()[0x18da4:0x18da8]==boot_call
     from pebble_rgb import make_report
-    assert make_report(b'\xff\x00\x00')==bytes.fromhex('035247420101ff0000')+bytes(55)
+    assert make_report(b'\xff\x00\x00')==bytes.fromhex('035247420301ff00000000')+bytes(53)
     for mode,name in enumerate(('static','cycle','pulse','off')):
         report=make_report(b'\x12\x34\x56',name)
-        assert len(report)==64 and report[:10]==bytes.fromhex('035247420201123456')+bytes([mode])
+        assert len(report)==64 and report[:11]==bytes.fromhex('035247420301123456')+bytes([mode,0])
         report=make_report(b'\x12\x34\x56',name,True)
         assert len(report)==64 and report[:11]==bytes.fromhex('035247420301123456')+bytes([mode,1])
     from pebble_rgb import query_report,parse_reply

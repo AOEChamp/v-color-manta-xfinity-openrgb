@@ -1,4 +1,5 @@
 {
+  "version": "patched v1",
   "source_sha256": "d1d3188234476d240aa877bf064e8a44a347d4206d4f1a1aa52b6da61f29bad8",
   "clear_sha256": "ba0d0ca1f33579096378aa62009b15f3f35737f92659c717dbc67042070498b1",
   "encoded_sha256": "8065eda52ff8aa43bd9b1d7316f458b9c9cad7904d516491d3443c35a6a1c610",
@@ -730,7 +731,6 @@
       "pulse": 2,
       "off": 3
     },
-    "legacy_v1_static": true,
     "query_opcode": 2,
     "reply_opcode": 130,
     "query_transport": "control output request; interrupt input response"
@@ -747,5 +747,5 @@
     "query_helper": 96
   },
   "transport": "atomic latest-mode/color/save mailbox; consumed by existing application timer",
-  "status": "MODE PAYLOAD BUILT OFFLINE; hardware untested; container and boot checks reported separately"
+  "status": "Patched v1 payload; offline instruction, layout and boot checks are run separately"
 }

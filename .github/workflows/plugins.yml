@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r firmware/requirements-dev.txt -r firmware/creative-pebble-pro/requirements-dev.txt
-      - run: python firmware/tools/validate_final.py
+      - run: python firmware/tools/validate_firmware.py
       - run: python firmware/creative-pebble-pro/tools/build.py
       - run: python firmware/creative-pebble-pro/tools/test_pebble_rgb_persistent.py
       - run: python firmware/creative-pebble-pro/tools/test_pebble_bootloader.py

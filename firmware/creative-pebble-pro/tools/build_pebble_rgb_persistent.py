@@ -1,4 +1,4 @@
-"""Build an OFFLINE experimental application payload, never an updater.
+"""Build the patched v1 application payload offline; never flash a device.
 
 Uses a tiny explicit MIPS32 encoder; all instructions are disassembled and
 emulated by the separate test. No hardware access or device-library loading.
@@ -13,13 +13,13 @@ import struct
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'build/clear/zephyr.bin'
-OUT = ROOT / 'build/rgb-v3'
+OUT = ROOT / 'build/patched-v1'
 BASE = 0xbf000000
 CAVE = 0xb1330
 LIMIT = 0xb18d0
 SOURCE_HASH = 'd1d3188234476d240aa877bf064e8a44a347d4206d4f1a1aa52b6da61f29bad8'
 
-# V1: 03 52 47 42 01 01 RR GG BB (static); V2: ... 02 01 RR GG BB MODE.
+# The firmware wire-format identifier is 0x03; release name is patched v1.
 # SET_REPORT Output 03, exactly 64 bytes. Modes: static/cycle/pulse/off = 0..3.
 WIRE_MAGIC = 0x42475203
 MAILBOX = 0xbfc2575c
@@ -411,18 +411,18 @@ def main():
         encoder = runpy.run_path(str(ROOT / 'tools/verify_pebble_reencoding.py'))['encode']
     encoded = encoder(bytes(data))
     (OUT / 'zephyr-rgb.encoded.bin').write_bytes(encoded)
-    manifest = dict(source_sha256=SOURCE_HASH, clear_sha256=hashlib.sha256(data).hexdigest(),
+    manifest = dict(version="patched v1", source_sha256=SOURCE_HASH, clear_sha256=hashlib.sha256(data).hexdigest(),
         encoded_sha256=hashlib.sha256(encoded).hexdigest(), size=len(data),
         parser=parser, worker=worker, code_size=len(code), code_end=a.pc,
         calls=a.calls, delegates=a.delegates, changes=changes,
         protocol=dict(report_id=3, transfer='HID SET_REPORT Output, EP0', length=64,
                       prefix='03 52 47 42 03 01', rgb_offsets=[6,7,8],mode_offset=9,save_flag_offset=10,
-                      modes={'static':0,'cycle':1,'pulse':2,'off':3},legacy_v1_static=True,
+                      modes={'static':0,'cycle':1,'pulse':2,'off':3},
                       query_opcode=2,reply_opcode=0x82,query_transport='control output request; interrupt input response'),
         mailbox=MAILBOX,restore=a.labels['restore'],save=a.labels['persist_save'],query=a.labels['read_reply'],property_key=KEY[:-1].decode(),
         stack_frames=dict(worker=32,save_helper=64,boot_restore=48,query_helper=96),
         transport='atomic latest-mode/color/save mailbox; consumed by existing application timer',
-        status='Protocol-v3 payload rebuilt offline; see validation/ for historical hardware checks')
+        status='Patched v1 payload; offline instruction, layout and boot checks are run separately')
     (OUT / 'manifest.json').write_text(json.dumps(manifest, indent=2))
     print(json.dumps({k:manifest[k] for k in ('status','code_size','size','clear_sha256')}, indent=2))
 

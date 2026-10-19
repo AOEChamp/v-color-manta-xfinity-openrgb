@@ -35,7 +35,7 @@ QWidget* VColorRamPlugin::GetWidget() {
     if(widget)return widget;
     widget=new QWidget;auto layout=new QVBoxLayout(widget);
     auto help=new QLabel("Eight LEDs per DIMM and 15 lighting modes. Select a RAM device in Devices.\n"
-        "Save to Device requires the previously patched DIMM firmware. Ordinary updates remain volatile.\n"
+        "Save to Device requires the patched v1 DIMM firmware. Ordinary updates remain volatile.\n"
         "Run the desktop app as administrator. Stop the V-Color bridge before scanning.");
     help->setWordWrap(true);layout->addWidget(help);
     status=new QLabel("Use Rescan to check RAM status.");status->setWordWrap(true);layout->addWidget(status);
@@ -109,7 +109,7 @@ void VColorRamPlugin::Device::Apply(bool save) {
         if(selected>=15)throw std::runtime_error("Invalid lighting mode");
         unsigned speed=VColor::modes[selected].animated?controller->GetModeSpeed(selected):0;
         plugin->bus->Transaction([&]{VColor::Apply(*plugin->bus,address,colors,selected,speed,save);});
-        if(save)plugin->Message("Save command sent to DIMM. Persistent saves require patched E000 firmware.");
+        if(save)plugin->Message("Save command sent to DIMM. Persistent saves require patched v1 firmware.");
     }catch(const std::exception& e){plugin->Message(e.what(),true);}
 }
 

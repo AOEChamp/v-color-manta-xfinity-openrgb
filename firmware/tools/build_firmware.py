@@ -1,4 +1,4 @@
-"""Rebuild the final firmware from the bundled, hash-guarded stock image."""
+"""Rebuild patched v1 from the bundled, hash-guarded stock image."""
 import json
 import sys
 from pathlib import Path

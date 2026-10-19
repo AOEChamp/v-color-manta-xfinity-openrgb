@@ -1,7 +1,7 @@
-"""Send a volatile RGB command to the experimental Pebble Pro firmware.
+"""Control or query Pebble Pro patched v1 firmware.
 
 Uses HID control SET_REPORT, never interrupt OUT or firmware update commands.
-Stock firmware has no acknowledgment; success only confirms USB transfer.
+Set commands confirm USB transfer; query saved state and power-cycle to verify persistence.
 """
 import argparse
 import ctypes as c
@@ -25,11 +25,8 @@ MODES={'static':0,'cycle':1,'pulse':2,'off':3}
 
 def make_report(color,mode=None,save=False):
     if len(color)!=3:raise ValueError('Expected three RGB bytes')
-    if save:
-        return b'\x03RGB\x03\x01'+color+bytes([MODES[mode or 'static'],1])+bytes(53)
-    # No --mode preserves the installed v1 static protocol.
-    if mode is None:return b'\x03RGB\x01\x01'+color+bytes(55)
-    return b'\x03RGB\x02\x01'+color+bytes([MODES[mode]])+bytes(54)
+    return b'\x03RGB\x03\x01'+color+bytes([MODES[mode or 'static'],int(save)])+bytes(53)
+
 
 def query_report(nonce):
     if len(nonce)!=3:raise ValueError('Expected three nonce bytes')
@@ -53,7 +50,7 @@ def parse_reply(report,nonce):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('color',nargs='?',help='six hexadecimal RGB digits, e.g. FF0000')
-    parser.add_argument('--mode',choices=MODES,help='Requires the newer mode-capable firmware; cycle ignores RGB')
+    parser.add_argument('--mode',choices=MODES,help='Cycle ignores RGB; requires patched v1 firmware')
     parser.add_argument('--save',action='store_true',help='Save as power-on default; requires persistence firmware')
     parser.add_argument('--read',action='store_true',help='Read identity/current/saved state; requires persistence firmware')
     args = parser.parse_args()
@@ -117,7 +114,7 @@ def main():
     if args.read:return
     print(json.dumps(dict(usb_control_transfer_succeeded=True,
                          rgb=color.hex(), path=paths[0],
-                         mode=args.mode or ('static (v3)' if args.save else 'static (legacy v1)'),
+                         mode=args.mode or 'static',
                          save_requested=args.save,
                          visible_effect_requires_confirmation=True), indent=2))
 

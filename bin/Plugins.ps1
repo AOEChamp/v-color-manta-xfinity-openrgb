@@ -30,7 +30,7 @@ function Convert-BridgeConnection($Settings) {
     })
     $entries += @(
         @{name='V-Color Manta XFinity RAM'; enabled=$true; description='Eight LEDs per DIMM, hardware effects and explicit Save to Device through PawnIO.'},
-        @{name='Creative Pebble Pro'; enabled=$true; description='Mode, color and Save to Device for Pebble Pro custom firmware v3. Both rings share one zone.'}
+        @{name='Creative Pebble Pro'; enabled=$true; description='Mode, color and Save to Device for Pebble Pro patched v1 firmware. Both rings share one zone.'}
     )
     $Settings['Plugins']['plugins'] = $entries
     return ,$Settings
