@@ -1,0 +1,120 @@
+[
+  {
+    "mode": "Static",
+    "state": {
+      "custom_firmware": true,
+      "protocol": 3,
+      "capabilities": 15,
+      "active_native_mode_raw": 255,
+      "instantaneous_rgb": "0000ff",
+      "host_target_rgb": "0000ff",
+      "host_target_valid": true,
+      "saved": {
+        "mode": "pulse",
+        "rgb": "ff0000"
+      },
+      "saved_record_valid": true
+    }
+  },
+  {
+    "mode": "Pulsate",
+    "state": {
+      "custom_firmware": true,
+      "protocol": 3,
+      "capabilities": 15,
+      "active_native_mode_raw": 254,
+      "instantaneous_rgb": "000800",
+      "host_target_rgb": "00ff00",
+      "host_target_valid": true,
+      "saved": {
+        "mode": "pulse",
+        "rgb": "ff0000"
+      },
+      "saved_record_valid": true
+    }
+  },
+  {
+    "mode": "Cycle",
+    "state": {
+      "custom_firmware": true,
+      "protocol": 3,
+      "capabilities": 15,
+      "active_native_mode_raw": 1,
+      "instantaneous_rgb": "f0000a",
+      "host_target_rgb": "0a0000",
+      "host_target_valid": false,
+      "saved": {
+        "mode": "pulse",
+        "rgb": "ff0000"
+      },
+      "saved_record_valid": true
+    }
+  },
+  {
+    "mode": "Off",
+    "state": {
+      "custom_firmware": true,
+      "protocol": 3,
+      "capabilities": 15,
+      "active_native_mode_raw": 255,
+      "instantaneous_rgb": "000000",
+      "host_target_rgb": "000000",
+      "host_target_valid": true,
+      "saved": {
+        "mode": "pulse",
+        "rgb": "ff0000"
+      },
+      "saved_record_valid": true
+    }
+  },
+  {
+    "mode": "Direct",
+    "state": {
+      "custom_firmware": true,
+      "protocol": 3,
+      "capabilities": 15,
+      "active_native_mode_raw": 255,
+      "instantaneous_rgb": "ff0000",
+      "host_target_rgb": "ff0000",
+      "host_target_valid": true,
+      "saved": {
+        "mode": "pulse",
+        "rgb": "ff0000"
+      },
+      "saved_record_valid": true
+    }
+  },
+  {
+    "mode": "Pulsate",
+    "state": {
+      "custom_firmware": true,
+      "protocol": 3,
+      "capabilities": 15,
+      "active_native_mode_raw": 254,
+      "instantaneous_rgb": "080000",
+      "host_target_rgb": "ff0000",
+      "host_target_valid": true,
+      "saved": {
+        "mode": "pulse",
+        "rgb": "ff0000"
+      },
+      "saved_record_valid": true
+    }
+  },
+  {
+    "save_to_device": {
+      "custom_firmware": true,
+      "protocol": 3,
+      "capabilities": 15,
+      "active_native_mode_raw": 254,
+      "instantaneous_rgb": "080000",
+      "host_target_rgb": "ff0000",
+      "host_target_valid": true,
+      "saved": {
+        "mode": "pulse",
+        "rgb": "ff0000"
+      },
+      "saved_record_valid": true
+    }
+  }
+]

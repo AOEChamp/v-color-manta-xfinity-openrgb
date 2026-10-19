@@ -1,0 +1,46 @@
+name: Native plugins and offline firmware checks
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  plugins:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: CalcProgrammer1/OpenRGB
+          ref: e2bae772a9c8a05142e8af1b0efb1c9eb39e74d3
+          path: build/openrgb
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install aqtinstall==3.3.0
+      - run: python -m aqt install-qt windows desktop 6.8.3 win64_msvc2022_64 --outputdir "${{ runner.temp }}/Qt" --archives qtbase
+      - name: Build both DLLs and run protocol tests
+        shell: pwsh
+        run: |
+          $env:QT_ROOT = '${{ runner.temp }}/Qt/6.8.3/msvc2022_64'
+          $env:OPENRGB_SOURCE = '${{ github.workspace }}/build/openrgb'
+          ./plugins/build.cmd
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - run: powershell.exe -NoProfile -File plugins/test_installer.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OpenRGB-Native-Plugins-Windows-x64
+          path: bin/
+  firmware:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r firmware/requirements-dev.txt -r firmware/creative-pebble-pro/requirements-dev.txt
+      - run: python firmware/tools/validate_final.py
+      - run: python firmware/creative-pebble-pro/tools/build.py
+      - run: python firmware/creative-pebble-pro/tools/test_pebble_rgb_persistent.py
+      - run: python firmware/creative-pebble-pro/tools/test_pebble_bootloader.py

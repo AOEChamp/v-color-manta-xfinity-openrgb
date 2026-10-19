@@ -1,0 +1,8 @@
+{
+    "Id": "org.openrgb.PebbleProCustomFirmware",
+    "Name": "Creative Pebble Pro",
+    "VersionStr": "0.1.0",
+    "Commit": "local-protocol-v3",
+    "Url": "",
+    "OpenRGBPluginAPIVersion": 5
+}

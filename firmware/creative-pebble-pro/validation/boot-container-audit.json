@@ -1,0 +1,272 @@
+{
+  "application_original_bytes": 839360,
+  "application_patched_bytes": 839360,
+  "growth_bytes": 0,
+  "slots": [
+    {
+      "name": "fw0_sys",
+      "type": 2,
+      "file_id": 4,
+      "mirror": 0,
+      "flags": 2,
+      "start": 16384,
+      "size": 950272,
+      "end": 966656,
+      "address": 16384,
+      "free_bytes": 110912
+    },
+    {
+      "name": "fw1_sys",
+      "type": 2,
+      "file_id": 4,
+      "mirror": 1,
+      "flags": 2,
+      "start": 1040384,
+      "size": 950272,
+      "end": 1990656,
+      "address": 1040384,
+      "free_bytes": 110912
+    }
+  ],
+  "declared_partition_extent": 2097152,
+  "partitions": [
+    {
+      "name": "fw0_boot",
+      "type": 1,
+      "file_id": 1,
+      "mirror": 0,
+      "flags": 2,
+      "start": 0,
+      "size": 4096,
+      "end": 4096,
+      "address": 0
+    },
+    {
+      "name": "sys_para",
+      "type": 6,
+      "file_id": 2,
+      "mirror": 0,
+      "flags": 2,
+      "start": 4096,
+      "size": 4096,
+      "end": 8192,
+      "address": 4096
+    },
+    {
+      "name": "fw1_boot",
+      "type": 1,
+      "file_id": 1,
+      "mirror": 1,
+      "flags": 2,
+      "start": 8192,
+      "size": 4096,
+      "end": 12288,
+      "address": 8192
+    },
+    {
+      "name": "sys_para",
+      "type": 6,
+      "file_id": 2,
+      "mirror": 1,
+      "flags": 2,
+      "start": 12288,
+      "size": 4096,
+      "end": 16384,
+      "address": 12288
+    },
+    {
+      "name": "fw0_sys",
+      "type": 2,
+      "file_id": 4,
+      "mirror": 0,
+      "flags": 2,
+      "start": 16384,
+      "size": 950272,
+      "end": 966656,
+      "address": 16384
+    },
+    {
+      "name": "fw0_sdfs",
+      "type": 4,
+      "file_id": 5,
+      "mirror": 0,
+      "flags": 2,
+      "start": 966656,
+      "size": 73728,
+      "end": 1040384,
+      "address": 966656
+    },
+    {
+      "name": "fw1_sys",
+      "type": 2,
+      "file_id": 4,
+      "mirror": 1,
+      "flags": 2,
+      "start": 1040384,
+      "size": 950272,
+      "end": 1990656,
+      "address": 1040384
+    },
+    {
+      "name": "fw1_sdfs",
+      "type": 4,
+      "file_id": 5,
+      "mirror": 1,
+      "flags": 2,
+      "start": 1990656,
+      "size": 73728,
+      "end": 2064384,
+      "address": 1990656
+    },
+    {
+      "name": "nvram_fa",
+      "type": 4,
+      "file_id": 6,
+      "mirror": 15,
+      "flags": 0,
+      "start": 2064384,
+      "size": 4096,
+      "end": 2068480,
+      "address": 2064384
+    },
+    {
+      "name": "nvram_fa",
+      "type": 4,
+      "file_id": 7,
+      "mirror": 15,
+      "flags": 0,
+      "start": 2068480,
+      "size": 8192,
+      "end": 2076672,
+      "address": 2068480
+    },
+    {
+      "name": "nvram_us",
+      "type": 4,
+      "file_id": 8,
+      "mirror": 15,
+      "flags": 0,
+      "start": 2076672,
+      "size": 20480,
+      "end": 2097152,
+      "address": 2076672
+    }
+  ],
+  "actual_chip_capacity_read": false,
+  "spi_stg_cap_raw": [
+    [
+      4096
+    ]
+  ],
+  "new_global_ram_bytes": 0,
+  "worker_stack_frame_bytes": 32,
+  "additional_stack_frames": {
+    "worker": 32,
+    "save_helper": 64,
+    "boot_restore": 48,
+    "query_helper": 96
+  },
+  "runtime_stack_margin_verified": false,
+  "param_partition_crc_valid": true,
+  "param_version_crc_valid": true,
+  "app_header_unchanged": true,
+  "app_header_magic_valid": true,
+  "app_entry": 3204448304,
+  "app_header_size": 48,
+  "app_size_checksum_fields": [
+    0,
+    0,
+    0
+  ],
+  "container": {
+    "original_size": 4890640,
+    "patched_size": 4890640,
+    "stock_exact_rebuild": true,
+    "patched_fat_readback_exact": true,
+    "db_tail_unchanged": true,
+    "changed_bytes": 2496,
+    "sha256": "7fe19a661d17c2abd1de215c65afb5ae87d1775474c150274f0614a5c7dd90fe",
+    "file": "Historical development artifact: DO-NOT-FLASH-MF1710-RGB.fw",
+    "vendor_parser_readback": "passed; exact patched application and identical logical SQLite contents",
+    "unchanged_exported_payloads": [
+      "CommonEx.pyd",
+      "CryptoEx.pyd",
+      "EATS2853.FW",
+      "FIRMWARE",
+      "fwsp.pyd",
+      "Launch.pyo",
+      "logger.pyd",
+      "make_fw.dll",
+      "MakeCardV2.pyd",
+      "mbrec.bin",
+      "mp_usb.bin",
+      "nvram.bin",
+      "param.bin",
+      "Production.pyd",
+      "sdfs.bin",
+      "sdfs_ori.bin"
+    ]
+  },
+  "update_write_recipe": [
+    [
+      "param.bin",
+      4096
+    ],
+    [
+      "zephyr.bin",
+      16384
+    ],
+    [
+      "sdfs.bin",
+      966656
+    ],
+    [
+      "nvram.bin",
+      2064384
+    ],
+    [
+      "mbrec.bin",
+      0
+    ]
+  ],
+  "boot_selector": [
+    [
+      "mbrec.bin"
+    ]
+  ],
+  "full_updater_writes_bootloader": true,
+  "recovery": {
+    "separate_flash_boot_copies": [
+      {
+        "name": "fw0_boot",
+        "type": 1,
+        "file_id": 1,
+        "mirror": 0,
+        "flags": 2,
+        "start": 0,
+        "size": 4096,
+        "end": 4096,
+        "address": 0
+      },
+      {
+        "name": "fw1_boot",
+        "type": 1,
+        "file_id": 1,
+        "mirror": 1,
+        "flags": 2,
+        "start": 8192,
+        "size": 4096,
+        "end": 12288,
+        "address": 8192
+      }
+    ],
+    "bootloader_adfu_entry": "BFC385C8 -> boot API table through C00A0120",
+    "invalid_app_path": "BFC38918..BFC3892E logs invalid app then enters ADFU",
+    "hardware_recovery_check": "BFC387A2 GPIO 5 active-low check before application entry",
+    "physical_button_mapping_verified": false,
+    "live_recovery_verified": false,
+    "application_hang_auto_recovery_verified": false,
+    "caveat": "Flash bootloader must survive; stock WFILE recipe includes mbrec.bin at offset 0. ROM API inferred, ROM contents not read."
+  },
+  "overall": "OFFLINE CONTAINER CHECKS ONLY; not approved for flashing"
+}

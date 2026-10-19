@@ -7,7 +7,7 @@
 - OpenRGB with the installed PawnIO driver, `PawnIOLib.dll`, and signed `SmbusPIIX4.bin` module. The default folder is `C:\Program Files\OpenRGB`; use `-OpenRGBDir` for another installation folder. Python flashing tools require no pip packages.
 - AMD PIIX4 SMBus port 0. Discovery is limited to RGB controller addresses `0x70..0x73`. Intel transport and other bus configurations are not supported by these tools.
 
-Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the bridge, and other RGB/SMBus software. Keep power stable. Flashing changes the RGB controller's program flash and can leave lighting unusable if interrupted. These tools do not write DDR SPD.
+Close OpenRGB, V-COLOR software, GCC/RGB Fusion, SignalRGB, the RAM plugin desktop app, and other RGB/SMBus software. Keep power stable. Flashing changes the RGB controller's program flash and can leave lighting unusable if interrupted. These tools do not write DDR SPD.
 
 ## 1. Run the flashing script
 
